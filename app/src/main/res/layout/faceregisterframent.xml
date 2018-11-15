@@ -43,8 +43,7 @@
             <com.runvision.myview.MyCameraSuf
                 android:id="@+id/reg_myCameraSuf"
                 android:layout_width="640px"
-                android:layout_height="480px"
-                />
+                android:layout_height="480px" />
         </FrameLayout>
 
         <LinearLayout
@@ -58,10 +57,10 @@
                 android:gravity="center">
 
                 <ImageView
-
                     android:id="@+id/choose_bitmap"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/snap" />
 
             </LinearLayout>
 
@@ -70,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="40dp">
 
                 <LinearLayout
@@ -95,13 +94,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="年 龄:"
+                        android:text="年  龄:"
                         android:textColor="#747272"
                         android:layout_marginLeft="10dp"/>
 
                     <EditText
                         android:id="@+id/reg_age"
-                        android:layout_width="200px"
+                        android:layout_width="100px"
                         android:layout_height="wrap_content"
                         android:textColor="#000000"
                         android:digits="1234567890"
@@ -140,7 +139,7 @@
                     <EditText
                         android:digits="@string/filter_vcode"
                         android:id="@+id/reg_idnum"
-                        android:layout_width="200px"
+                        android:layout_width="100px"
                         android:layout_height="wrap_content"
                         android:textColor="#000000"
                         android:theme="@style/MyEditText"/>
@@ -159,7 +158,6 @@
                         android:text="类型:"
                         android:textColor="#747272"/>
 
-
                     <Spinner
                         android:id="@+id/reg_type"
                         android:layout_width="200px"
@@ -168,14 +166,12 @@
                         android:gravity="center"
                         android:theme="@style/MyEditText"/>
 
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="性别:"
                         android:textColor="#747272"
                         android:layout_marginLeft="10dp"/>
-
 
                     <Spinner
                         android:id="@+id/reg_sex"
@@ -186,12 +182,8 @@
                         android:theme="@style/MyEditText">
 
                     </Spinner>
-
                 </LinearLayout>
-
             </LinearLayout>
-
-
         </LinearLayout>
 
         <LinearLayout
