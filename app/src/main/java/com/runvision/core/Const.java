@@ -23,20 +23,14 @@ public class Const {
     /**
      * 人脸模版所有 在第一次加载到这里面来
      */
-    // public static Map<String, byte[]> mTemplateMap = new HashMap<String, byte[]>();
     public static int CARD_WIDTH = 102;//身份证图片的宽度
 
     public static int CARD_HEIGTH = 126;//身份证图片的高度
 
-
     public static int COMPER_NUM = 10;
-
-
-   // public static float comper_socre = 0.65f;//1：N阈值
 
     public static float ONEVSMORE_SCORE=0.72f;//1：N阈值
 
-   // public static float comper_socre_1 = 0.45f;//1：1阈值
     public static float ONEVSONE_SCORE = 0.52f;//1：1阈值
 
 
@@ -75,7 +69,6 @@ public class Const {
     public static final int MSG_FACE=1007;
 
 
-
     //socket连接超时
     public static final int SOCKET_TIMEOUT = 10;
     public static final int SOCKET_DIDCONNECT = 11;
@@ -104,6 +97,7 @@ public class Const {
 
     public static final int SOCKET_LOGIN = 9;
 
+    public static final String MOBILE_SAFE_PSD = "666666";
 
     /**
      * 抓拍图片保存未知
