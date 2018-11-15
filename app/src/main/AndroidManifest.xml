@@ -32,11 +32,14 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.runvision.webcore.CoreService"/>
-
         <activity android:name="com.runvision.g702_sn.RegisterActivity"/>
 
         <activity android:name="com.runvision.g702_sn.MainActivity"/>
+
+        <service android:name="com.runvision.webcore.CoreService"/>
+
+        <service android:name="com.runvision.service.ProximityService" />
+
         <receiver
             android:name="com.runvision.broadcast.BootBroadcastReceiver"
             android:enabled="true"

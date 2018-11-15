@@ -33,6 +33,7 @@ import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.FaceSimilar;
 import com.arcsoft.face.LivenessInfo;
+import com.common.pos.api.util.PosUtil;
 import com.runvision.bean.AppData;
 import com.runvision.bean.FaceInfoss;
 import com.runvision.bean.ImageStack;
@@ -43,6 +44,7 @@ import com.runvision.db.User;
 import com.runvision.frament.DeviceSetFrament;
 import com.runvision.gpio.GPIOHelper;
 import com.runvision.myview.MyCameraSuf;
+import com.runvision.service.ProximityService;
 import com.runvision.thread.BatchImport;
 import com.runvision.thread.FaceFramTask;
 import com.runvision.thread.HeartBeatThread;
@@ -90,7 +92,7 @@ import android_serialport_api.SerialPort;
 public class MainActivity extends Activity implements NetWorkStateReceiver.INetStatusListener, View.OnClickListener {
 
     public static Context mContext;
-    //private ComperThread mComperThread;//1:n比对线程
+    private Intent intentService;
     private MyRedThread mMyRedThread;//红外线程
     private UIThread uithread;
     private UDPServerThread mUDPServerThread;
@@ -586,6 +588,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         application.init();
         application.addActivity(this);
 
+        intentService = new Intent(mContext, ProximityService.class);
+        startService(intentService);
+
         openNetStatusReceiver();
         openSocket();
 
@@ -600,14 +605,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     protected void onResume() {
         super.onResume();
         hideBottomUIMenu();
-        // stratThread();
-        //  bStop = false;
         IntentFilter usbDeviceStateFilter = new IntentFilter();
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUsbReceiver, usbDeviceStateFilter);
         startIDCardReader();
-
+        startService(intentService);
 
         if (uithread == null) {
             uithread = new UIThread();
@@ -633,6 +636,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         mCameraSurfView.releaseCamera();
         //关闭红外
         mMyRedThread.closeredThread();
+        stopService(intentService);
+
         if (mMyRedThread != null) {
             mMyRedThread.interrupt();
             mMyRedThread = null;
@@ -1018,10 +1023,14 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
                 if (user.getType().equals("黑名单")) {
                     ShowPromptMessage("黑名单", 3);
-                    // return;
                 } else {
                     GPIOHelper.openDoor(true);
-                    mHandler.postDelayed(() -> GPIOHelper.openDoor(false), SPUtil.getInt(Const.KEY_OPENDOOR, Const.CLOSE_DOOR_TIME) * 1000);
+                    PosUtil.setRelayPower(1);//开闸
+
+                    mHandler.postDelayed(() -> {
+                        GPIOHelper.openDoor(false);
+                        PosUtil.setRelayPower(0);//关闸
+                    }, SPUtil.getInt(Const.KEY_OPENDOOR, Const.CLOSE_DOOR_TIME) * 1000);
                     oneVsMoreView.setVisibility(View.VISIBLE);
                     playMusic(R.raw.success);
                     mHandler.postDelayed(() -> oneVsMoreView.setVisibility(View.GONE), 1000);
@@ -1060,47 +1069,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 + AppData.getAppData().getCardNo().substring(16, 18));
         card_nation.setText(AppData.getAppData().getNation());
         faceBmp_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-     /*   if (AppData.getAppData().getoneCompareScore() == 0) {
-            str="失败";
-            isSuccessComper.setImageResource(R.mipmap.icon_sb);
-            if (AppData.getAppData().getOneFaceBmp() == null) {
-                faceBmp_view.setImageResource(R.mipmap.tx);
-                faceBmp_view.setScaleType(ImageView.ScaleType.FIT_XY);
-            } else {
-                faceBmp_view.setImageBitmap(AppData.getAppData().getOneFaceBmp());
-                //保存抓拍图片
-                String snapImageID = IDUtils.genImageName();
-                FileUtils.saveFile(AppData.getAppData().getOneFaceBmp(), snapImageID,TestDate.DGetSysTime()+"_Face");
-                //保存身份证图片
-                String cardImageID = snapImageID + "_card";
-                FileUtils.saveFile(AppData.getAppData().getCardBmp(), cardImageID,TestDate.DGetSysTime()+"_Card");
-
-                Record record = new Record(AppData.getAppData().getoneCompareScore() + "", str, Environment.getExternalStorageDirectory() + "/FaceAndroid/"+TestDate.DGetSysTime()+"_Face"+"/"+snapImageID, "人证");
-                User user = new User(AppData.getAppData().getName(), "无", AppData.getAppData().getSex(), 0, "无", AppData.getAppData().getCardNo(), Environment.getExternalStorageDirectory() + "/FaceAndroid/"+TestDate.DGetSysTime()+"_Card"+"/"+cardImageID, DateTimeUtils.getTime());
-                user.setRecord(record);
-                MyApplication.faceProvider.addRecord(user);
-            }
-            playMusic(R.raw.error);
-
-            oneVsMoreView.setVisibility(View.GONE);
-            alert.setVisibility(View.VISIBLE);
-
-        } else*/
         if ((AppData.getAppData().getoneCompareScore() == 0) || (AppData.getAppData().getoneCompareScore() < SPUtil.getFloat(Const.KEY_CARDSCORE, Const.ONEVSONE_SCORE) && AppData.getAppData().getOneFaceBmp() != null)) {
             str = "失败";
             isSuccessComper.setImageResource(R.mipmap.icon_sb);
             if (AppData.getAppData().getOneFaceBmp() == null) {
                 faceBmp_view.setImageResource(R.mipmap.tx);
                 faceBmp_view.setScaleType(ImageView.ScaleType.FIT_XY);
-              /*  mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        oneVsMoreView.setVisibility(View.GONE);
-                        alert.setVisibility(View.VISIBLE);
-                        playMusic(R.raw.error);
-                    }
-
-                }, 1000);*/
             } else {
                 faceBmp_view.setImageBitmap(AppData.getAppData().getOneFaceBmp());
                 //保存抓拍图片
@@ -1126,8 +1100,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             isSuccessComper.setImageResource(R.mipmap.icon_tg);
             faceBmp_view.setImageBitmap(AppData.getAppData().getOneFaceBmp());
             GPIOHelper.openDoor(true);
+            PosUtil.setRelayPower(1);//开闸
 
-            mHandler.postDelayed(() -> GPIOHelper.openDoor(false), SPUtil.getInt(Const.KEY_OPENDOOR, Const.CLOSE_DOOR_TIME) * 1000);
+            mHandler.postDelayed(() -> {
+                GPIOHelper.openDoor(false);
+                PosUtil.setRelayPower(0);//关闸
+            }, SPUtil.getInt(Const.KEY_OPENDOOR, Const.CLOSE_DOOR_TIME) * 1000);
 
             //保存抓拍图片
             String snapImageID = IDUtils.genImageName();
@@ -1145,7 +1123,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             user.setRecord(record);
             MyApplication.faceProvider.addRecord(user);
 
-            mHandler.postDelayed(() -> GPIOHelper.openDoor(false), 1000);
+            mHandler.postDelayed(() -> {
+                GPIOHelper.openDoor(false);
+                PosUtil.setRelayPower(0);//关闸
+            }, 1000);
             oneVsMoreView.setVisibility(View.GONE);
             alert.setVisibility(View.VISIBLE);
 
