@@ -35,7 +35,6 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
     private List<com.arcsoft.face.FaceInfo> result = new ArrayList<>();
     private List<LivenessInfo> livenessInfoList = new ArrayList<>();
 
-   // List<AFT_FSDKFace> result = new ArrayList<>();
     byte[] des;
     private boolean flag=false;
     public static boolean faceflag=false;
@@ -70,15 +69,12 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
                 }
                 faceflag=true;
                 if((!flag)&&(live)) {
-                   // AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(result.get(0).getRect().left, result.get(0).getRect().top, result.get(0).getRect().right, result.get(0).getRect().bottom, CameraHelp.getBitMap(des)));
                     FaceInfoss info = new FaceInfoss(des,result.get(0));
                     Message msg = new Message();
                     msg.obj = info;
                     msg.what = Const.MSG_FACE;
                     handler.sendMessage(msg);
                 }
-
-
             } else {
                 Log.i(TAG, "无人脸");
                 if (imageStack!=null) {

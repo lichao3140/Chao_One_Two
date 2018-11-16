@@ -19,6 +19,7 @@ import com.runvision.bean.ImageStack;
 import com.runvision.core.Const;
 import com.runvision.thread.FaceFramTask;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,6 +33,7 @@ public class MyCameraSuf extends SurfaceView implements SurfaceHolder.Callback, 
     private Camera mCamera;
     private Context mContext;
     private Camera.Parameters parameters;
+    private Camera.Size previewSize;
     private FaceFramTask task;
     private static byte[] mCameraData = null;
     public static ExecutorService exec = Executors.newFixedThreadPool(10);
@@ -95,8 +97,13 @@ public class MyCameraSuf extends SurfaceView implements SurfaceHolder.Callback, 
                     if (parameters == null) {
                         parameters = mCamera.getParameters();
                     }
-                    parameters.setPreviewFormat(ImageFormat.NV21);
+//                    DisplayMetrics metrics = new DisplayMetrics();
+//                    WindowManager WM = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+//                    WM.getDefaultDisplay().getMetrics(metrics);
+//                    previewSize = getBestSupportedSize(parameters.getSupportedPreviewSizes(), metrics);
+//                    parameters.setPreviewSize(previewSize.width, previewSize.height);
                     parameters.setPictureSize(Const.PRE_WIDTH, Const.PRE_HEIGTH);
+                    parameters.setPreviewFormat(ImageFormat.NV21);
                     mCamera.setParameters(parameters);
                     mCamera.setDisplayOrientation(270);
                     mCamera.setPreviewDisplay(mSurfaceHolder);
@@ -120,7 +127,6 @@ public class MyCameraSuf extends SurfaceView implements SurfaceHolder.Callback, 
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
         Log.i(TAG, "surfaceCreated...:"+cameraStaus);
         openCamera();
 
@@ -189,8 +195,8 @@ public class MyCameraSuf extends SurfaceView implements SurfaceHolder.Callback, 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPaint.setColor(Color.GREEN);
-        if(camerType==1){
-            mScreenWidth=480;
+        if(camerType == 1){
+            mScreenWidth = 480;
         }
         float startX = mScreenWidth - nFaceRight;
         float startY = nFaceTop;
@@ -258,5 +264,27 @@ public class MyCameraSuf extends SurfaceView implements SurfaceHolder.Callback, 
             this.nFaceBottom = rect.bottom * mProportionH;
         }
         postInvalidate();
+    }
+
+    /**
+     * 得到相机合适的预览尺寸
+     * @param sizes
+     * @param metrics
+     * @return
+     */
+    private Camera.Size getBestSupportedSize(List<Camera.Size> sizes, DisplayMetrics metrics) {
+        Camera.Size bestSize = sizes.get(0);
+        float screenRatio = (float) metrics.widthPixels / (float) metrics.heightPixels;
+        if (screenRatio > 1) {
+            screenRatio = 1 / screenRatio;
+        }
+
+        for (Camera.Size s : sizes) {
+            if (Math.abs((s.height / (float) s.width) - screenRatio) < Math.abs(bestSize.height /
+                    (float) bestSize.width - screenRatio)) {
+                bestSize = s;
+            }
+        }
+        return bestSize;
     }
 }
