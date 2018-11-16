@@ -584,6 +584,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUsbReceiver, usbDeviceStateFilter);
+        //USB身份证读卡
         startIDCardReader();
         startIdCardThread();
         startService(intentService);
@@ -906,7 +907,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         idrparams.put(ParameterHelper.PARAM_KEY_PID, PID);
         idCardReader = IDCardReaderFactory.createIDCardReader(this, TransportType.USB, idrparams);
         readCard();
-
     }
 
 
@@ -942,7 +942,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                             msg.what = Const.READ_CARD;
                             msg.obj = idCardInfo;
                             mHandler.sendMessage(msg);
-
                         }
                     }
                 }
@@ -957,8 +956,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             //Toast.makeText(mContext, "连接读卡器失败:" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /**
      * 隐藏虚拟按键，并且全屏
@@ -981,9 +978,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 提示显示框
      */
-    ///////////////////////////////////////////////////////////////////////////////// 显示提示框内容
-
-    //提示显示框
     private void ShowPromptMessage(String showmessage, int audionum) {
         if (audionum == 1) {
             playMusic(R.raw.burlcard);
@@ -1003,7 +997,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 1vsn显示对比后成功是否窗口
      */
-    ///////////////////////////////////////////////////////////////////////////////// 1vsn显示对比后成功是否窗口
     private void showAlert() {
 
         if ((isOpenOneVsMore != false) || (Const.DELETETEMPLATE == false)) {
@@ -1073,7 +1066,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 1v1显示对比后成功是否窗口
      */
-    ///////////////////////////////////////////////////////////////////////////////// 1v1显示对比后成功是否窗口
     private void showAlertDialog() {
         String str = "";
         cardBmp_view.setImageBitmap(AppData.getAppData().getCardBmp());
@@ -1114,7 +1106,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             oneVsMoreView.setVisibility(View.GONE);
             alert.setVisibility(View.VISIBLE);
             playMusic(R.raw.error);
-
         } else if (AppData.getAppData().getOneFaceBmp() != null && AppData.getAppData().getoneCompareScore() >= SPUtil.getFloat(Const.KEY_CARDSCORE, Const.ONEVSONE_SCORE)) {
             str = "成功";
             playMusic(R.raw.success);
@@ -1175,7 +1166,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
         AppData.getAppData().setoneCompareScore(0);
         ReaderCardFlag = true;
-        //ReaderCardFlag = true;
         mHandler.postDelayed(() -> {
             oneVsMoreView.setVisibility(View.GONE);
             alert.setVisibility(View.GONE);
@@ -1186,8 +1176,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 播放语音
      */
-    ///////////////////////////////////////////////////////////////////////////////// 播放语音
-    public void playMusic(int msuicID) {
+    public void playMusic(int musicID) {
         if (!SPUtil.getBoolean(Const.KEY_ISOPENMUSIC, Const.OPEN_MUSIC)) {
             return;
         }
@@ -1196,14 +1185,13 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 mPlayer.release();
             }
         }
-        mPlayer = MediaPlayer.create(mContext, msuicID);
+        mPlayer = MediaPlayer.create(mContext, musicID);
         mPlayer.start();
     }
 
     /**
      * 1：N比对操作线程
      */
-    ///////////////////////////////////////////////////////////////////////////////// 1：N比对操作线程
     class OneVsMoreThread extends Thread {
         private FaceInfoss info;
         FaceFeature face;
@@ -1223,8 +1211,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 //  AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left,info.getFace().getRect().top,info.getFace().getRect().right,info.getFace().getRect().bottom,CameraHelp.getBitMap(info.getDes())));
                 int ret = MyApplication.mFaceLibCore.FaceFeatureExtract(info.getDes(), 480, 640, info.getFace(), face);
                 if (ret == 0) {
-
-                    // AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left,info.getFace().getRect().top,info.getFace().getRect().right,info.getFace().getRect().bottom,CameraHelp.getBitMap(info.getDes())));
                     float fenshu = SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE);
                     if (score == null) {
                         score = new FaceSimilar();
@@ -1285,9 +1271,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 红外线程
      */
-    ///////////////////////////////////////////////////////////////////////////////// 红外线程
     private class MyRedThread extends Thread {
-
         public boolean redflag = false;
         private TimeCompareUtil timecompare;
 
@@ -1467,7 +1451,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         if (!SPUtil.getString(Const.KEY_VMSIP, "").equals("") && SPUtil.getInt(Const.KEY_VMSPROT, 0) != 0 && !SPUtil.getString(Const.KEY_VMSUSERNAME, "").equals("") && !SPUtil.getString(Const.KEY_VMSPASSWORD, "").equals("")) {
             //开启socket线程
             socketReconnect(SPUtil.getString(Const.KEY_VMSIP, ""), SPUtil.getInt(Const.KEY_VMSPROT, 0));
-
         }
     }
 

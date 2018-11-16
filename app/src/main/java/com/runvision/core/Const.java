@@ -133,14 +133,12 @@ public class Const {
     public static final String STARTIME = "startime";
     public static final String ENDTIME = "endtime";
 
-    public static String startime="06:00";
-    public static String endtime="16:00";
+    public static String startime = "23:00";
+    public static String endtime = "06:00";
 
     public static final String KEY_PRESERVATION_DAY= "preservation_day";
-
     public static final String KEY_EDITION = "edition";
     public static final String KEY_TELEPHONE_NUMBER = "telephonenumber";
-
 
     /**
      * 默认开启活体
