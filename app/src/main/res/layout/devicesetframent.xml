@@ -5,7 +5,6 @@
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
-
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
@@ -38,6 +37,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890."/>
         </LinearLayout>
 
@@ -60,6 +62,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890."/>
         </LinearLayout>
 
@@ -81,6 +86,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890"/>
         </LinearLayout>
 
@@ -102,6 +110,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890"/>
         </LinearLayout>
 
@@ -125,6 +136,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890."/>
         </LinearLayout>
 
@@ -141,7 +155,6 @@
                 android:text="保存数据："
                 android:textColor="#747272"
                 android:textSize="20sp"/>
-
 
             <Spinner
                 android:id="@+id/Preservation_time"
@@ -167,8 +180,7 @@
                 android:id="@+id/cb_choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/My_CheckBox"
-                />
+                android:theme="@style/My_CheckBox" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,11 +189,7 @@
                 android:textColor="#747272"
                 android:text="开启活体"
                 android:textSize="20sp"/>
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 
 
@@ -215,12 +223,13 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890."/>
-
         </LinearLayout>
 
         <!-- vms端口号： -->
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -238,6 +247,9 @@
                 android:layout_width="200px"
                 android:textColor="#747272"
                 android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
+                android:inputType="number"
                 android:digits="1234567890"/>
 
         </LinearLayout>
@@ -258,13 +270,13 @@
                 android:id="@+id/vms_uername"
                 android:layout_width="200px"
                 android:textColor="#747272"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
-
         <!-- vms密 码 -->
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -281,13 +293,11 @@
                 android:id="@+id/vms_password"
                 android:layout_width="200px"
                 android:textColor="#747272"
+                android:drawableBottom="@drawable/line"
+                android:background="@null"
                 android:layout_height="wrap_content"/>
-
         </LinearLayout>
-
-
     </LinearLayout>
-
 
     <Button
         android:id="@+id/btn_Refresh"
@@ -297,6 +307,7 @@
         android:text="重置"
         android:textColor="#747272"
         android:textSize="25sp"/>
+
     <Button
         android:id="@+id/btn_Sure"
         android:layout_width="300dp"
@@ -305,6 +316,5 @@
         android:text="确定"
         android:textColor="#747272"
         android:textSize="25sp"/>
-
 
 </LinearLayout>
