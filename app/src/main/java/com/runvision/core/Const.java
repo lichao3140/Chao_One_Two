@@ -68,7 +68,6 @@ public class Const {
     public static final int COMPER_FINIASH=1006;
     public static final int MSG_FACE=1007;
 
-
     //socket连接超时
     public static final int SOCKET_TIMEOUT = 10;
     public static final int SOCKET_DIDCONNECT = 11;
@@ -135,7 +134,6 @@ public class Const {
     public static String startime="06:00";
     public static String endtime="16:00";
 
-
     public static final String KEY_PRESERVATION_DAY= "preservation_day";
 
     public static final String KEY_EDITION = "edition";
@@ -153,9 +151,9 @@ public class Const {
     public static final boolean OPEN_MUSIC = true;
 
     /**
-     * 30S无操作  返回待机页面  相机休眠
+     * 10min无操作  返回待机页面  相机休眠
      */
-    public static final int CLOSE_HOME_TIMEOUT = 30;
+    public static final int CLOSE_HOME_TIMEOUT = 10 * 1000;
 
 
     public static final int CLOSE_DOOR_TIME = 1;
@@ -170,18 +168,16 @@ public class Const {
 
     //public static Boolean BATCH_IMPORT_TEMPLATE=false;
 
- public static String Templatepath = Environment.getExternalStorageDirectory() + "/FaceAndroid/Template/";
- public static String ImagePath = Environment.getExternalStorageDirectory() + "/FaceAndroid/FaceTemplate/";
+     public static String Templatepath = Environment.getExternalStorageDirectory() + "/FaceAndroid/Template/";
+     public static String ImagePath = Environment.getExternalStorageDirectory() + "/FaceAndroid/FaceTemplate/";
 
- public static boolean WEB_UPDATE=false;
- public static boolean DELETETEMPLATE=false;
+     public static boolean WEB_UPDATE=false;
+     public static boolean DELETETEMPLATE=false;
 
- //public static boolean LIVE=false;
+     //public static boolean LIVE=false;
 
-
- public static int all_count=0;
- public static int up_count=0;
- public static int down_count=0;
-
+     public static int all_count=0;
+     public static int up_count=0;
+     public static int down_count=0;
 
 }

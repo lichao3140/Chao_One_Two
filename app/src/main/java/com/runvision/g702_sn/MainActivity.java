@@ -1253,7 +1253,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         public void run() {
             super.run();
             while (true) {
-                int status = GPIOHelper.readStatus();
+                //G69A
+                //int status = GPIOHelper.readStatus();
+                //G701  G702
+                int status = PosUtil.getPriximitySensorStatus();
                 status = 1;
                 if (redflag == true) {
                     try {
@@ -1300,7 +1303,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * 更新UI标志线程
      */
-    ///////////////////////////////////////////////////////////////////////////////// 更新UI标志线程
     private class UIThread extends Thread {
         @Override
         public void run() {
@@ -1321,11 +1323,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * udp服务端
      */
-    ///////////////////////////////////////////////////////////////////////////////// 更新UI标志线程
     private class UDPServerThread extends Thread {
         @Override
         public void run() {
-            // TODO Auto-generated method stub
             super.run();
             while (true) {
                 try {
@@ -1338,8 +1338,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         }
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 开启HTTP服务时显示IP
      *
