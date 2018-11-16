@@ -41,6 +41,7 @@ dependencies {
     implementation files('libs/zkandroidcore.jar')
     implementation files('libs/zkandroididcardreader.jar')
     implementation files('libs/FaceAGM.jar')
+    implementation files('libs/telpo_api.jar')
     implementation 'com.yanzhenjie:andserver:1.1.4'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
