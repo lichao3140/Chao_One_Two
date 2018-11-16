@@ -203,7 +203,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         ReaderCardFlag = false;
                         Const.DELETETEMPLATE = false;
                         showToast("正在删除模板,停止比对！");
-                        // Toast.makeText(mContext, "正在导入模板", Toast.LENGTH_SHORT).show();
                     }
 
                     if (Const.DELETETEMPLATE == false) {
@@ -251,9 +250,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
                     /*设置删除数据操作*/
                     String time1 = TestDate.SGetSysTime();
-                    // String time2=TestDate.getSupportEndDayofMonth(new Date());
                     if ((df.format(new Date()).equals("00:00:00")) && SysTimeflag == true) {
-                        // TestDate.getTime();
                         SysTimeflag = false;
 
                         String time11 = TestDate.timetodate(TestDate.getTime(time1));
@@ -332,7 +329,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         Const.BATCH_IMPORT_TEMPLATE = false;
                         Const.BATCH_FLAG = 2;
                         showToast("正在导入模板,停止比对！");
-                        // Toast.makeText(mContext, "正在导入模板", Toast.LENGTH_SHORT).show();
                     }
                     if ((template >= 5) || (Const.VMS_BATCH_IMPORT_TEMPLATE == true)) {
                         if (faceDetectTask != null) {
@@ -343,9 +339,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         if (mMyRedThread != null) {
                             mMyRedThread.closeredThread();
                         }
-                        // home_layout.setVisibility(View.VISIBLE);
-                        // templatenum=0;
-                        // template++;
                         ReaderCardFlag = false;
                         oneVsMoreView.setVisibility(View.GONE);
                         alert.setVisibility(View.GONE);
@@ -381,13 +374,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     if (Const.UPDATE_IP == true) {
                         int returndate = DeviceSetFrament.updateSetting(AppData.getAppData().getUpdatedeviceip(), mContext);
                         if (returndate == 3) {
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    openHttpServer();
-                                }
-
-                            }, 3000);
+                            mHandler.postDelayed(() -> openHttpServer(), 3000);
                         }
                         Const.UPDATE_IP = false;
                     }
@@ -395,7 +382,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
                 case Const.MSG_FACE://开启一比n处理
                     FaceInfoss info = (FaceInfoss) msg.obj;
-                    // AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left,info.getFace().getRect().top,info.getFace().getRect().right,info.getFace().getRect().bottom,CameraHelp.getBitMap(info.getDes())));
                     openOneVsMoreThread(info);
                     break;
                 case Const.READ_CARD://收到读卡器的信息
@@ -472,7 +458,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         sendMessageDelayed(msgb, 1000);
                     }
                     if (count4 == 0) {
-
                         home_layout.setVisibility(View.VISIBLE);
                         mCameraSurfView.releaseCamera();
                     }
@@ -518,14 +503,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     //  progesss1.setProgress(b);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         // batchDialog.dismiss();
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Const.VMS_TEMPLATE = true;
-                                Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                            }
+                        mHandler.postDelayed(() -> {
+                            Const.VMS_TEMPLATE = true;
+                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                         }, 2000);
-
                     }
                     break;
                 case 102:/*VMS批量导入结束操作*/
@@ -537,12 +518,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     // progesss2.setProgress(b2);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         // batchDialog.dismiss();
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Const.VMS_TEMPLATE = true;
-                                Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                            }
+                        mHandler.postDelayed(() -> {
+                            Const.VMS_TEMPLATE = true;
+                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                         }, 2000);
 
                     }
@@ -556,12 +534,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     //  progesss3.setProgress(b3);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         // batchDialog.dismiss();
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Const.VMS_TEMPLATE = true;
-                                Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                            }
+                        mHandler.postDelayed(() -> {
+                            Const.VMS_TEMPLATE = true;
+                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                         }, 2000);
                     }
                     break;
@@ -627,14 +602,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         mMyRedThread.startredThread();
 
         isOpenOneVsMore = true;
-        // Log.i("Gavin","mList:"+MyApplication.mList.size());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //关闭相机线程
-        //  Log.i("Gavin","onPause");
         Infra_red = false;
         mCameraSurfView.releaseCamera();
         //关闭红外
@@ -663,7 +636,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         try {
             idCardReader.close(0);
         } catch (IDCardReaderException e) {
-            // TODO Auto-generated catch block
             Log.i(TAG, "关闭失败");
         }
         IDCardReaderFactory.destroy(idCardReader);
@@ -716,6 +688,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         home_set = findViewById(R.id.home_set);
         home_set.setOnClickListener(view -> {
             showConfirmPsdDialog();
+            isOpenOneVsMore = false;
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         });
     }
@@ -1797,6 +1770,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             }
         });
 
-        bt_cancel.setOnClickListener(view1 -> dialog.dismiss());
+        bt_cancel.setOnClickListener(view1 -> {
+            isOpenOneVsMore = true;
+            dialog.dismiss();
+        });
     }
 }
