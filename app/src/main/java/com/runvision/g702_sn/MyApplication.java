@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -94,7 +95,9 @@ public class MyApplication extends Application {
 
     }
 
-
+    /**
+     * 加载模板
+     */
     private void loadTemper() {
         String path = Environment.getExternalStorageDirectory() + "/FaceAndroid/Template/";
         File mFile = new File(path);
@@ -106,12 +109,14 @@ public class MyApplication extends Application {
         for (File file : files) {
             byte[] temp = CameraHelp.readFile(file);
             String userName = file.getName().substring(0, file.getName().indexOf("."));
-            // byteslist.add(temp);
             mList.put(userName, temp);
         }
-
     }
 
+    /**
+     * 获取序列号
+     * @return
+     */
     public String getSerialNumber() {
         String serial = "";
         try {
@@ -130,6 +135,12 @@ public class MyApplication extends Application {
         // 设置该CrashHandler为程序的默认处理器
         UnCeHandler catchExcep = new UnCeHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     /**
