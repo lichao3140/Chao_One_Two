@@ -69,17 +69,14 @@ public class MyApplication extends Application {
 //            LogToFile.e(TAG,"该设备没有序列号");
 //            finishActivity();
 //        }
-        //Log.i("Gavin_1114","路径："+context.getFilesDir().listFiles().);
         File[] fs = context.getFilesDir().listFiles();
         String ff = null;
         for (File f : fs){
             System.out.println(f);
-            Log.i("Gavin_1114","路径f："+f);
             ff= f.toString();
-            Log.i("Gavin_1114","路径ff："+ff);
         }
         FileUtils.copyFile(ff,Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat");
-        FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat",ff);
+        FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat", ff);
 
         int ret = mFaceLibCore.initLib(context);
         if (ret == 0) {
