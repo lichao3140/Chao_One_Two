@@ -110,13 +110,11 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private View promptshow_xml;//提示框
     private TextView loadprompt;
 
-
     private View oneVsMoreView;  //1:N
     // private ImageView oneVsMore_face, oneVsMore_temper;
 
     private ImageView oneVsMore_temper;
     private TextView oneVsMore_userName, oneVsMore_userID, oneVsMore_userType;
-
 
     private View alert; //1:1
     private ImageView faceBmp_view, cardBmp_view, idcard_Bmp, isSuccessComper;
@@ -587,8 +585,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUsbReceiver, usbDeviceStateFilter);
         //USB身份证读卡
-        startIDCardReader();
-        startIdCardThread();
+//        startIDCardReader();
+        //串口身份证读卡
+//        startIdCardThread();
         startService(intentService);
 
         if (uithread == null) {
@@ -1861,7 +1860,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     e.printStackTrace();
                     result = e;
                 } finally {
-
+                    //IdCard.close();
                 }
                 return result;
             }
@@ -1885,7 +1884,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 }
                 mHandler.sendEmptyMessageDelayed(Const.MSG_READ_CARD, 2000);
             } else {
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(Const.MSG_READ_CARD, ""), 0);
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(Const.MSG_READ_CARD, ""), 100);
             }
         }
     }

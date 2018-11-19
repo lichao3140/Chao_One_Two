@@ -68,7 +68,7 @@ public class MyApplication extends Application {
         String serlia = getSerialNumber();
         if (serlia.equals("") || serlia.length() < 4 || !serlia.substring(0, 4).equals("R50A")) {
             LogToFile.e(TAG,"该设备没有序列号");
-            finishActivity();
+//            finishActivity();
         }
         File[] fs = context.getFilesDir().listFiles();
         String ff = null;
