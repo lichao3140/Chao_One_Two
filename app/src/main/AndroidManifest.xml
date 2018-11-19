@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.WIFI_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.REBOOT" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name="com.runvision.g702_sn.MyApplication"
@@ -32,9 +32,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.runvision.g702_sn.RegisterActivity"/>
+        <activity
+            android:name="com.runvision.g702_sn.RegisterActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name="com.runvision.g702_sn.UpdateActivity"/>
+        <activity
+            android:name="com.runvision.g702_sn.UpdateActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.runvision.webcore.CoreService"/>
 

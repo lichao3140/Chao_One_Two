@@ -366,7 +366,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     break;
                 case Const.MSG_READ_CARD:
                     mHandler.removeMessages(Const.MSG_READ_CARD);
-                    startIdCardThread();
+//                    startIdCardThread();
                     break;
                 case Const.READ_CARD_INFO:
                     mHandler.removeMessages(Const.COMPER_FINIASH);
@@ -585,7 +585,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         usbDeviceStateFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUsbReceiver, usbDeviceStateFilter);
         //USB身份证读卡
-//        startIDCardReader();
+        startIDCardReader();
         //串口身份证读卡
 //        startIdCardThread();
         startService(intentService);
@@ -626,10 +626,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             faceDetectTask = null;
         }
         //关闭串口身份证读取
-        if (mAsyncTask != null) {
-            mAsyncTask.setTaskIsRuning(false);
-            mAsyncTask = null;
-        }
+//        if (mAsyncTask != null) {
+//            mAsyncTask.setTaskIsRuning(false);
+//            mAsyncTask = null;
+//        }
         //关闭未播报完语音
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
@@ -1803,7 +1803,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             String psd = Const.MOBILE_SAFE_PSD;
             if(!TextUtils.isEmpty(confirmPsd)){
                 if(psd.equals(confirmPsd)) {
-                    Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                    Intent intent = new Intent(mContext, RegisterActivity.class);
                     startActivity(intent);
                     dialog.dismiss();
                 } else {
