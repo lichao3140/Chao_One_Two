@@ -76,7 +76,6 @@ import com.zkteco.android.biometric.module.idcard.IDCardReader;
 import com.zkteco.android.biometric.module.idcard.IDCardReaderFactory;
 import com.zkteco.android.biometric.module.idcard.exception.IDCardReaderException;
 import com.zkteco.android.biometric.module.idcard.meta.IDCardInfo;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +93,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android_serialport_api.SerialPort;
 
 public class MainActivity extends Activity implements NetWorkStateReceiver.INetStatusListener, View.OnClickListener {
 
