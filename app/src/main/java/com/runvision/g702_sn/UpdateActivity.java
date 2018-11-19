@@ -146,6 +146,7 @@ public class UpdateActivity extends Activity {
         if (name != null) {
             apkPath = apkPath + "/" + name;//APK的绝对路径
             Log.d(TAG, "initView:APK路径: " + apkPath);
+//            Toast.makeText(this, apkPath, Toast.LENGTH_LONG).show();
             apkInfo(apkPath);
 //            iv_icon_1.setImageDrawable(drawable1);
  //           iv_icon_2.setImageDrawable(drawable2);

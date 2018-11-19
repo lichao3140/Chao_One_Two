@@ -42,6 +42,7 @@ import com.runvision.bean.AppData;
 import com.runvision.bean.FaceInfoss;
 import com.runvision.bean.ImageStack;
 import com.runvision.broadcast.NetWorkStateReceiver;
+import com.runvision.broadcast.UdiskReceiver;
 import com.runvision.core.Const;
 import com.runvision.db.Record;
 import com.runvision.db.User;
@@ -567,6 +568,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         openNetStatusReceiver();
         openSocket();
 
+        //监听U盘热插拔模块启动
+        udiskPluggedin();
+
         if (mUDPServerThread == null) {
             mUDPServerThread = new UDPServerThread();
             mUDPServerThread.start();
@@ -692,6 +696,26 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             showConfirmPsdDialog();
             isOpenOneVsMore = false;
         });
+    }
+
+    /**
+     * 监听U盘热插拔
+     */
+    private void udiskPluggedin() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.hardware.usb.action.USB_STATE");
+        filter.addAction("android.hardware.action.USB_DISCONNECTED");
+        filter.addAction("android.hardware.action.USB_CONNECTED");
+
+        filter.addAction("android.intent.action.UMS_CONNECTED");
+        filter.addAction("android.intent.action.UMS_DISCONNECTED");
+        filter.addAction(Intent.ACTION_MEDIA_CHECKING);
+        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        filter.addAction(Intent.ACTION_MEDIA_EJECT);
+        filter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        filter.addDataScheme("file");
+        UdiskReceiver mReceiver = new UdiskReceiver();
+        registerReceiver(mReceiver, filter);
     }
 
     /**

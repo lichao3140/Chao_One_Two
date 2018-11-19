@@ -24,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/translucent">
-        <activity android:name="com.runvision.g702_sn.UpdateActivity">
+        <activity android:name="com.runvision.g702_sn.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -34,7 +34,7 @@
 
         <activity android:name="com.runvision.g702_sn.RegisterActivity"/>
 
-        <activity android:name="com.runvision.g702_sn.MainActivity"/>
+        <activity android:name="com.runvision.g702_sn.UpdateActivity"/>
 
         <service android:name="com.runvision.webcore.CoreService"/>
 
