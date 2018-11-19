@@ -38,7 +38,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class UpdateActivity extends Activity {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "UpdateActivity";
     @BindView(R.id.main_iv_icon_1)
     ImageView iv_icon_1;
     @BindView(R.id.main_iv_icon_2)
@@ -67,7 +67,7 @@ public class UpdateActivity extends Activity {
         ButterKnife.bind(this);
         Observable.timer(2, TimeUnit.SECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> { initView(); });
+                .subscribe(aLong -> initView());
         /* 定时器 定时查找要安装的软件 */
         disposable = Observable.interval(10, TimeUnit.SECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -132,11 +132,11 @@ public class UpdateActivity extends Activity {
     }
 
     private void initView() throws Exception {
-        String apkPath = "/mnt/usb_storage/USB_DISK1/udisk0";//本地APK的根目录,不同的屏路径不同
+        String apkPath = "/mnt/usb_storage/USB_DISK0/udisk0";//本地APK的根目录,不同的屏路径不同
         Log.d(TAG, "initView: -当前版本号-" + getVersionName());
         if (!(new File(apkPath).exists())) {
             Log.e(TAG, "initView: ----没找到该文件夹");
-            Intent intent = new Intent((Activity) this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             return;
@@ -154,7 +154,7 @@ public class UpdateActivity extends Activity {
             updataApk(apkPath);
         } else {
             Log.e(TAG, "initView: --没找到apk文件");
-            Intent intent = new Intent((Activity) this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -168,7 +168,7 @@ public class UpdateActivity extends Activity {
      */
     private void updataApk(String apkPath) throws Exception {
         if (appName.equals(getResources().getString(R.string.app_name))) {
-            //比较版本号的大小~
+            //比较版本号的大小
             if (Integer.valueOf(getNumber(version)) > Integer.valueOf(getNumber(getVersionName()))) {
                 //关闭定时器
                 if (disposable != null && !disposable.isDisposed()) {
@@ -198,14 +198,14 @@ public class UpdateActivity extends Activity {
                 this.startActivity(intent);
               //  installApk(apkPath);
             } else {
-                Intent intent = new Intent((Activity) this, MainActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 Log.e(TAG, "updataApk: ---APK文件的版本是过低");
                 Toast.makeText(this, "这个已经是最新版本了", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Intent intent = new Intent((Activity) this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             Log.e(TAG, "updataApk: ---这个APK文件不能用于本地更新");
@@ -262,11 +262,9 @@ public class UpdateActivity extends Activity {
                         })
                 .setNegativeButton("暂不更新",
                         (dialog12, whichButton) -> {
-                            // 点击"取消"按钮之后退出程序
-//                                finish();
+                            // 点击"取消"按钮
                             dialog12.dismiss();
                         }).create();// 创建
-
         dialog.show();
     }
 
@@ -354,105 +352,56 @@ public class UpdateActivity extends Activity {
     }
 
 
-    // 闈欓粯鍗歌浇
-
     private void uninstallSlient() {
-//		Log.i("Gavin", "uninstallSlient:" + mActivity.getPackageName());
         String cmd = "pm uninstall " + this.getPackageName();
-
         Process process = null;
-
         DataOutputStream os = null;
-
         BufferedReader successResult = null;
-
         BufferedReader errorResult = null;
-
         StringBuilder successMsg = null;
-
         StringBuilder errorMsg = null;
 
         try {
-
-            // 鍗歌浇涔熼渶瑕乺oot鏉冮檺
-
             process = Runtime.getRuntime().exec("su");
-
             os = new DataOutputStream(process.getOutputStream());
-
             os.write(cmd.getBytes());
-
             os.writeBytes("\n");
-
             os.writeBytes("exit\n");
-
             os.flush();
-
-            // 鎵ц鍛戒护
-
             process.waitFor();
-
-            // 鑾峰彇杩斿洖缁撴灉
-
             successMsg = new StringBuilder();
-
             errorMsg = new StringBuilder();
-
             successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
             errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
             String s;
-
             while ((s = successResult.readLine()) != null) {
-
                 successMsg.append(s);
-
             }
 
             while ((s = errorResult.readLine()) != null) {
-
                 errorMsg.append(s);
-
             }
         } catch (Exception e) {
-
             e.printStackTrace();
-
         } finally {
-
             try {
-
                 if (os != null) {
-
                     os.close();
-
                 }
-
                 if (process != null) {
-
                     process.destroy();
-
                 }
 
                 if (successResult != null) {
-
                     successResult.close();
-
                 }
 
                 if (errorResult != null) {
-
                     errorResult.close();
-
                 }
-
             } catch (Exception e) {
-
                 e.printStackTrace();
-
             }
-
         }
     }
 
@@ -494,6 +443,6 @@ public class UpdateActivity extends Activity {
                 this.startActivity(intent);
             }
         }
-
     }
+
 }
