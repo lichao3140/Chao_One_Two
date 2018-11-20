@@ -201,7 +201,7 @@ public class SocketThread extends Thread {
         str = str.substring(553 * 2, str.length() - 6);
         int mImageSize = ConversionHelp.bytesToInt2(ConversionHelp.decodeHex(str.substring(344 * 2, 348 * 2)), 0);
         String imageName = name + "&" + Type.getType(type).getDesc() + "&" + sexStr + "&" + age + "&" + workNo + "&" + cardNo;
-        System.out.println("imageName=" + imageName);
+        Log.i("Gavin","imageName="+ imageName);
         FileUtils.socketSaveImage(ConversionHelp.decodeHex(str.substring(348 * 2, (348 + mImageSize) * 2)), imageName);
     }
 

@@ -2,6 +2,7 @@ package com.runvision.thread;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -51,12 +52,12 @@ public class BatchImport implements Runnable {
 
             File file = mList.get(i - 1);
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), FileUtils.getBitmapOption(2));
-          //  byte[] mBGR = FileUtils.bitmapToBGR24(bitmap);
-            int w = bitmap.getWidth() % 2 == 0 ? bitmap.getWidth() : bitmap.getWidth() - 1;
-            int h = bitmap.getHeight() % 2 == 0 ? bitmap.getHeight() : bitmap.getHeight() - 1;
-            byte[] nv21 = CameraHelp.getNV21(w, h, bitmap);
-            String time = DateTimeUtils.parseDataTimeToFormatString(new Date());
+            bitmap =CameraHelp.alignBitmapForNv21(bitmap);//裁剪
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
 
+            byte[] nv21 = CameraHelp.bitmapToNv21(bitmap,w, h);//转nv21
+            String time = DateTimeUtils.parseDataTimeToFormatString(new Date());
 
             String userName = file.getName().substring(0, file.getName().indexOf("."));
             String[] strs = userName.split("&");
