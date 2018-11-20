@@ -3,7 +3,6 @@ package com.runvision.thread;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 import com.runvision.bean.Type;
 import com.runvision.core.Const;
 import com.runvision.core.LogToFile;
@@ -170,7 +169,6 @@ public class SocketThread extends Thread {
      * @param str
      */
     private void analysisTempterData(String str) throws UnsupportedEncodingException {
-
         String name = new String(ConversionHelp.decodeHex(ConversionHelp.hexStringRemove0(str.substring(27 * 2, 91 * 2))), "gbk");
         int type = Integer.parseInt(str.substring(91 * 2, 93 * 2), 16);
         int sex = Integer.parseInt(str.substring(95 * 2, 96 * 2), 16);
@@ -349,6 +347,5 @@ public class SocketThread extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
