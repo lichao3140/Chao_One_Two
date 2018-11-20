@@ -1553,8 +1553,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         return mImportFile;
     }
 
+    /**
+     * 批量导入模板
+     */
     private void batchImport() {
-
         List<File> mImportFile = getImagePathFile();
         if (mImportFile == null) {
             return;
