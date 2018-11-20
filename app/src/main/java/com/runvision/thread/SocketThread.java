@@ -11,10 +11,8 @@ import com.runvision.utils.ConversionHelp;
 import com.runvision.utils.FileUtils;
 import com.runvision.utils.SPUtil;
 import com.runvision.utils.SendData;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

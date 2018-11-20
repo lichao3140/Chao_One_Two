@@ -544,7 +544,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     /**
      * ACTIVITY周期
      */
-    ////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

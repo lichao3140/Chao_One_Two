@@ -264,31 +264,25 @@ public class FaceRegisterFrament extends Fragment implements View.OnClickListene
         //保存图片
         //生成随机图片ID
         String imageID= IDUtils.genImageName();
-       // FileUtils.saveFile(reg_bmp, imageID, "FaceTemplate");
+        // FileUtils.saveFile(reg_bmp, imageID, "FaceTemplate");
         //封装pojo
 
-
-
         //--------------------------------------------------------
-        if(mSaveTemplate(reg_bmp,imageID))
-        {
+        if(mSaveTemplate(reg_bmp, imageID)) {
             User user = new User(userName, choose_type, choose_sex, Integer.parseInt(userage), userPhone, useridnum, imageID, DateTimeUtils.getTime());
             //添加
             int id = MyApplication.faceProvider.addUserOutId(user);
-          //  System.out.println("add id:" + id);
+            //System.out.println("add id:" + id);
             Toast.makeText(mContext, "添加成功", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-           // MyApplication.faceProvider.deleteUserById(id);
+        } else {
+            //MyApplication.faceProvider.deleteUserById(id);
             Toast.makeText(mContext, "添加失败", Toast.LENGTH_SHORT).show();
-
         }
 
     }
 
 
-    public boolean mSaveTemplate(Bitmap bitmap,String mfilename) {
+    public boolean mSaveTemplate(Bitmap bitmap, String mfilename) {
         boolean generateTemplate=false;
         String path = Environment.getExternalStorageDirectory() + "/FaceAndroid/Template/";
         String ImagePath = Environment.getExternalStorageDirectory() + "/FaceAndroid/Face/";
