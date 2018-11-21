@@ -74,7 +74,6 @@ public class FaceLibCore {
         int not_Live = 0;
         //活体检测(目前只支持单人脸，且无论有无人脸都需调用)
         Boolean Living_thing = false;
-        //  List<LivenessInfo> livenessInfoList = new ArrayList<>();
 
         int code = faceEngine.process(data, mWidth, mHeight, FaceEngine.CP_PAF_NV21, faceInfos, FaceEngine.ASF_LIVENESS);
         if (code != ErrorInfo.MOK) {
@@ -90,12 +89,13 @@ public class FaceLibCore {
             Log.i(TAG, "getLivenessScore: liveness " + code);
             if (code == 0) {
                 for (int i = 0; i < faceInfos.size(); i++) {
-                    if (livenessInfoList.get(i).getLiveness() == 1 && not_Live < 5) {
+                    if (livenessInfoList.get(i).getLiveness() == 1 && not_Live < 1) {
                         Log.i("Gavin", "活体" + not_Live);
                         Living_thing = true;
                     } else if (livenessInfoList.get(i).getLiveness() == 0) {
+                        not_Live++;
                         Living_thing = false;
-                        Log.i("Gavin", "未知或者非活体" + not_Live++);
+                        Log.i("Gavin", "未知或者非活体" + not_Live);
                     }
                 }
                 // Log.i("Gavin", "活体");
