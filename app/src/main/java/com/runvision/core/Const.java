@@ -117,6 +117,8 @@ public class Const {
     public static final String KEY_ONEVSMORESCORE = "oneVsMoreScore";
     public static final String KEY_CARDSCORE = "cardScore";
     public static final String KEY_ISOPENLIVE = "httest";
+    public static final String KEY_ISOPEN_ONE = "isopen1_1";
+    public static final String KEY_ISOPEN_N = "isopen1_N";
     public static final String KEY_ISOPENMUSIC = "isOpenMusic";
     public static final String KEY_BACKHOME = "backHome";
     public static final String KEY_OPENDOOR = "openDoor";
@@ -144,6 +146,16 @@ public class Const {
      * 默认开启活体
      */
     public static final boolean OPEN_LIVE = true;
+
+    /**
+     * 默认开启1比N
+     */
+    public static final boolean OPEN_ONE_VS_N = true;
+
+    /**
+     * 默认关闭1比1
+     */
+    public static final boolean OPEN_ONE_VS_ONE = false;
 
     /**
      * 默认开启语音

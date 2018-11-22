@@ -33,9 +33,15 @@ public class QueryAppConfig implements RequestHandler {
         //是否开启活体检测
         boolean isOpenLive = SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE);
         map.put(Const.KEY_ISOPENLIVE, isOpenLive);
+        //是否开启1:1
+        boolean isOneVSOne = SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE);
+        map.put(Const.KEY_ISOPEN_ONE, isOneVSOne);
+        //是否开启1:N
+        boolean isOneVSN = SPUtil.getBoolean(Const.KEY_ISOPEN_N, Const.OPEN_ONE_VS_N);
+        map.put(Const.KEY_ISOPEN_N, isOneVSN);
         //是否开启语音播报
-       // boolean isOpenMusic = SPUtil.getBoolean(Const.KEY_ISOPENMUSIC, Const.OPEN_MUSIC);
-       // map.put(Const.KEY_ISOPENMUSIC, isOpenMusic);
+        //boolean isOpenMusic = SPUtil.getBoolean(Const.KEY_ISOPENMUSIC, Const.OPEN_MUSIC);
+        //map.put(Const.KEY_ISOPENMUSIC, isOpenMusic);
 
         String startime = SPUtil.getString(Const.STARTIME, Const.startime);
         if(startime.equals("00:00"))

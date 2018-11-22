@@ -32,12 +32,22 @@ public class UpdateAppConfig implements RequestHandler {
         SPUtil.putInt(Const.KEY_BACKHOME, backHome);
         int closeDoor = Integer.parseInt(params.get("ondeltime"));
         SPUtil.putInt(Const.KEY_OPENDOOR, closeDoor);
-        //String httest = params.get("httest");
 
+        //活体
         int isOpenLive = Integer.parseInt(params.get("httest"));
         SPUtil.putBoolean(Const.KEY_ISOPENLIVE, isOpenLive == 1 ? true : false);
-       // int isOpenMusic = Integer.parseInt(params.get("voice"));
-       // SPUtil.putBoolean(Const.KEY_ISOPENMUSIC, isOpenMusic == 1 ? true : false);
+
+        //1:1
+        int isOneVSOne = Integer.parseInt(params.get("isopen1_1"));
+        SPUtil.putBoolean(Const.KEY_ISOPEN_ONE, isOneVSOne == 1 ? true : false);
+
+        //1:N
+        int isOneVSN = Integer.parseInt(params.get("isopen1_N"));
+        SPUtil.putBoolean(Const.KEY_ISOPEN_N, isOneVSN == 1 ? true : false);
+
+        //是否播放语音
+        //int isOpenMusic = Integer.parseInt(params.get("voice"));
+        //SPUtil.putBoolean(Const.KEY_ISOPENMUSIC, isOpenMusic == 1 ? true : false);
 
         String startime= params.get("startime");
         if(startime.equals("00:00"))

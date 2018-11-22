@@ -15,11 +15,11 @@
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical">
         <!-- 1:1阀值   -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,17 +30,17 @@
                 android:layout_height="wrap_content"
                 android:text="1:1核验 阀值："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/threshold_1"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/line"
                 android:background="@null"
+                android:digits="1234567890."
+                android:drawableBottom="@drawable/line"
                 android:inputType="number"
-                android:digits="1234567890."/>
+                android:textColor="#747272" />
         </LinearLayout>
 
 
@@ -55,17 +55,17 @@
                 android:layout_height="wrap_content"
                 android:text="1:N核验 阀值："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/threshold_n"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/line"
                 android:background="@null"
+                android:digits="1234567890."
+                android:drawableBottom="@drawable/line"
                 android:inputType="number"
-                android:digits="1234567890."/>
+                android:textColor="#747272" />
         </LinearLayout>
 
         <!-- 返回待机等待时间   -->
@@ -79,17 +79,17 @@
                 android:layout_height="wrap_content"
                 android:text="等待待机时间："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/wait_for_time"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/line"
                 android:background="@null"
+                android:digits="1234567890"
+                android:drawableBottom="@drawable/line"
                 android:inputType="number"
-                android:digits="1234567890"/>
+                android:textColor="#747272" />
         </LinearLayout>
 
         <!-- 开门延迟时间   -->
@@ -103,17 +103,17 @@
                 android:layout_height="wrap_content"
                 android:text="开门延迟时间："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/open_time"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/line"
                 android:background="@null"
+                android:digits="1234567890"
+                android:drawableBottom="@drawable/line"
                 android:inputType="number"
-                android:digits="1234567890"/>
+                android:textColor="#747272" />
         </LinearLayout>
 
 
@@ -129,19 +129,18 @@
                 android:gravity="center_horizontal"
                 android:text="本机 静态IP："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/device_ip"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
-                android:drawableBottom="@drawable/line"
                 android:background="@null"
+                android:digits="1234567890."
+                android:drawableBottom="@drawable/line"
                 android:inputType="number"
-                android:digits="1234567890."/>
+                android:textColor="#747272" />
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -154,41 +153,88 @@
                 android:layout_height="wrap_content"
                 android:text="保存数据："
                 android:textColor="#747272"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/Preservation_time"
                 android:layout_width="200px"
-                android:textColor="#747272"
                 android:layout_height="wrap_content"
                 android:entries="@array/user_time"
                 android:gravity="center"
-                android:theme="@style/MyEditText"
-                android:textSize="20sp"/>
+                android:textColor="#747272"
+                android:textSize="20sp"
+                android:theme="@style/MyEditText" />
 
         </LinearLayout>
 
         <!-- 开启语音播报 -->
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/cb_choice"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/My_CheckBox" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
 
-            <TextView
+                <CheckBox
+                    android:id="@+id/cb_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/My_CheckBox" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="开启活体"
+                    android:textColor="#747272"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textColor="#747272"
-                android:text="开启活体"
-                android:textSize="20sp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
+
+                <CheckBox
+                    android:id="@+id/cb_choice_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/My_CheckBox" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="开启1:1"
+                    android:textColor="#747272"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
+
+                <CheckBox
+                    android:id="@+id/cb_choice_n"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/My_CheckBox" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="开启1:N"
+                    android:textColor="#747272"
+                    android:textSize="20sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
