@@ -258,6 +258,19 @@
                     if(data.httest==1){
                         $("#httest").prop("checked",true);
                     }
+                    if(data.isopen1_1==0){
+                        $("#isopen1_1").prop("checked",false);
+                    }
+                    if(data.isopen1_1==1){
+                        $("#isopen1_1").prop("checked",true);
+                    }
+                    if(data.isopen1_N==0){
+                        $("#isopen1_N").prop("checked",false);
+                    }
+                    if(data.isopen1_N==1){
+                        $("#isopen1_N").prop("checked",true);
+                    }
+
                     $("#startime").val(data.startime);
                     $("#endtime").val(data.endtime);
                     $("#edition").html(data.edition);
@@ -272,12 +285,73 @@
         //修改设备参数
         function updconfig(){
             var httests=0;
+            var isopen1_1=0;
+            var isopen1_N=0;
             if($("#httest").prop("checked")==true){
                 httests=1;
             }
             if($("#httest").prop("checked")==false){
                 httests=0;
             }
+            if($("#isopen1_1").prop("checked")==true){
+                isopen1_1=1;
+            }
+            if($("#isopen1_1").prop("checked")==false){
+                isopen1_1=0;
+            }
+            if($("#isopen1_N").prop("checked")==true){
+                isopen1_N=1;
+            }
+            if($("#isopen1_N").prop("checked")==false){
+                isopen1_N=0;
+            }
+
+
+            var regnum = /^\+?[0-9][0-9]*$/;
+            var regu = "^([0-9])[0-9]*(\\.\\w*)?$";
+            var regdoublenum = new RegExp(regu);
+            var regip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+            var regno = new RegExp("[\\u4E00-\\u9FFF]+","g");
+            var regport=/^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+
+            if(!regdoublenum.test($("#onenum").val())){
+                swal("警告","1:1核验阈值请输入数字或小数","warning");
+                return;
+            }
+            if(!regdoublenum.test($("#nnum").val())){
+                swal("警告","1:N核验阈值请输入数字或小数","warning");
+                return;
+            }
+
+            if(!regnum.test($("#rettimeout").val())){
+                swal("警告","返回待机时间请输入正整数","warning");
+                return;
+            }
+            if(!regnum.test($("#ondeltime").val())){
+                swal("警告","开门延长时间请输入正整数","warning");
+                return;
+            }
+
+            if(!regip.test($("#vmsip").val())){
+                swal("警告","请输入正确的ip格式","warning");
+                return;
+            }
+
+            if(!regport.test($("#vmsport").val())){
+                swal("警告","请输入正确的端口格式","warning");
+                return;
+            }
+
+            if(regno.test($("#vmsuser").val())){
+                swal("警告","设备编号不能包含中文","warning");
+                return;
+            }
+
+            if(regno.test($("#vmspwd").val())){
+                swal("警告","验证口令不能包含中文","warning");
+                return;
+            }
+
             $.ajax({
                 url:'updateAppConfig',
                 type:'post',
@@ -295,13 +369,15 @@
                     httest:httests,
                     startime:$("#startime").val(),
                     endtime:$("#endtime").val(),
-                    telephonenumber:$("#telephonenumber").val()
+                    telephonenumber:$("#telephonenumber").val(),
+                    isopen1_1:isopen1_1,
+                    isopen1_N:isopen1_N
                 },
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                 success:function(data){
                     console.info(data);
                     if(data.code!=200){
-                        swal("错误", data.message, "error");
+                        swal("错误",data.message, "error");
                     }else{
                         swal("成功",data.message,"success");
                         esc();
@@ -450,7 +526,7 @@
 
 <!-- 修改设备信息面板 -->
 <div id="maskpanel" style="width:100%;height:100%;display:none;background-color:black;opacity: 0.7;position:fixed;z-index:1997;top:0px;"></div>
-<div id="devconfig"  style="background-color:white;z-index:1999;border:1px solid gray;border-radius:5px;width:500px;height:577px;margin:auto;position:fixed;display:none;top:0;left:0;right:0;bottom:0;">
+<div id="devconfig"  style="background-color:white;z-index:1999;border:1px solid gray;border-radius:5px;width:500px;height:607px;margin:auto;position:fixed;display:none;top:0;left:0;right:0;bottom:0;">
     <div  id="modeltitle" style="border-bottom:1px solid gray;text-align:center;font-size: 20px;font-family: '微软雅黑';line-height: 50px;margin-top:5px;">设备参数配置</div>
             <div style="text-align: left;">
                 <fieldset>
@@ -490,8 +566,8 @@
                         </tr>
                         <tr>
                             <td style="text-align:right;">设备待机时间：</td>
-                            <td style="text-align:left;"><input type="text" id="startime" class="time" style="border:1px solid #bfbdbd;outline: none;width:68.5%;text-align:center;" /></td>
-                            <td style="text-align:left;"><input type="text"  class="time" id="endtime" style="border:1px solid #bfbdbd;outline: none;width:68.5%;text-align:center;" /></td>
+                            <td style="text-align:left;"><input type="text" id="startime" class="time" readonly="readonly" style="border:1px solid #bfbdbd;outline: none;width:68.5%;text-align:center;" /></td>
+                            <td style="text-align:left;"><input type="text"  class="time" id="endtime" readonly="readonly" style="border:1px solid #bfbdbd;outline: none;width:68.5%;text-align:center;" /></td>
                         </tr>
                         <tr>
                             <td style="text-align:right;">数据保留时间：</td>
@@ -506,7 +582,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align:right;">开启活体检测：</td>
+                            <td style="text-align:right;">开启1:1识别：</td>
+                            <td style="text-align:left;"><input type="checkbox" name="isopen1_1"
+                                                                id="isopen1_1"/></td>
+                            <td style="text-align:left;">开启1:N识别：<input type="checkbox" name="isopen1_N"
+                                                                         id="isopen1_N"/></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">开启活体：</td>
                             <td style="text-align:left;"><input type="checkbox" name="httest"
                                                                 id="httest"/></td>
                         </tr>
