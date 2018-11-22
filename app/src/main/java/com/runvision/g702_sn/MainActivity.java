@@ -136,7 +136,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private boolean bStop = false;
 
     private boolean oneVsMoreThreadStauts = false;
-    private boolean isOpenOneVsMore = true;
+    private boolean isOpenOneVsMore = true;//1:N是否对比
     private boolean Infra_red = true;
     private ImageStack imageStack;
 
@@ -150,12 +150,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private static final int VID = 1024; // IDR VID
     private static final int PID = 50010; // IDR PID
     private IDCardReader idCardReader = null;
-    private boolean ReaderCardFlag = true;
+    private boolean ReaderCardFlag = true;//1:1是否对比
 
     //这个按钮是设置或以开关的
     private NetWorkStateReceiver receiver;
     private TextView socket_status;
-    //
+
     private SocketThread socketThread;
     private HeartBeatThread heartBeatThread;
     private TextView showHttpUrl;
@@ -241,7 +241,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
                     /*每天重启操作*/
                     if (df.format(new Date()).equals("02:00:00")) {
-                        Log.i("zhuhuilong", "data" + df.format(new Date()));
+                        Log.i("Gavin", "data" + df.format(new Date()));
                         rebootSU();
                     }
 
@@ -254,11 +254,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         String time22 = TestDate.getDateBefore(new Date(), SPUtil.getInt(Const.KEY_PRESERVATION_DAY, 90));
 
                         if (MyApplication.faceProvider.quaryUserTableRowCount("select count(id) from tUser") != 0) {
-                            Log.i("zhuhuilong", "quaryUserTableRowCount:不为0");
+                            Log.i("Gavin", "quaryUserTableRowCount:不为0");
                             mList = MyApplication.faceProvider.getAllPoints();
                             for (int i = 0; i < mList.size(); i++) {
-                                if (TimeCompare(time11, time22, TestDate.timetodate(String.valueOf(mList.get(i).getTime()))))//String.valueOf(mList.get(i).getTime())))
-                                {
+                                if (TimeCompare(time11, time22, TestDate.timetodate(String.valueOf(mList.get(i).getTime())))) {
                                     List<User> mList1 = MyApplication.faceProvider.queryRecord("select * from tRecord where id=" + (mList.get(i).getId()));
                                     FileUtils.deleteTempter(mList1.get(0).getTemplateImageID());
                                     FileUtils.deleteTempter(mList1.get(0).getRecord().getSnapImageID());
@@ -361,12 +360,14 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     break;
 
                 case Const.MSG_FACE://开启一比n处理
-                    FaceInfoss info = (FaceInfoss) msg.obj;
-                    openOneVsMoreThread(info);
+                    if (SPUtil.getBoolean(Const.KEY_ISOPEN_N, Const.OPEN_ONE_VS_N)) {
+                        FaceInfoss info = (FaceInfoss) msg.obj;
+                        openOneVsMoreThread(info);
+                    }
                     break;
                 case Const.MSG_READ_CARD:
                     mHandler.removeMessages(Const.MSG_READ_CARD);
-//                    startIdCardThread();
+                    startIdCardThread();
                     break;
                 case Const.READ_CARD_INFO:
                     mHandler.removeMessages(Const.COMPER_FINIASH);
@@ -399,14 +400,12 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     int count2 = (Integer) msg.obj;
 
                     if (count2 > 0) {
-                        Log.i("Gavin_1029", "1");
                         Message msg3 = obtainMessage();
                         msg3.what = Const.COMPER_FINIASH;
                         msg3.obj = count2 - 1;
                         sendMessageDelayed(msg3, 1000);
                     }
                     if (count2 == 4) {
-                        Log.i("Gavin_1029", "4");
                         pro_xml.setVisibility(View.GONE);
                         showAlertDialog();
                         Message msg3 = obtainMessage();
@@ -586,7 +585,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         //USB身份证读卡
         startIDCardReader();
         //串口身份证读卡
-//        startIdCardThread();
+        startIdCardThread();
         startService(intentService);
 
         if (uithread == null) {
@@ -625,10 +624,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             faceDetectTask = null;
         }
         //关闭串口身份证读取
-//        if (mAsyncTask != null) {
-//            mAsyncTask.setTaskIsRuning(false);
-//            mAsyncTask = null;
-//        }
+        if (mAsyncTask != null) {
+            mAsyncTask.setTaskIsRuning(false);
+            mAsyncTask = null;
+        }
         //关闭未播报完语音
         if (mPlayer != null) {
             if (mPlayer.isPlaying()) {
@@ -824,7 +823,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     public void faceComperFrame(Bitmap bmp) {
         int num = 1;
         //提取人脸
-        while (num <= 100) {
+        while (num <= 50) {
             List<FaceInfo> result = new ArrayList<FaceInfo>();
             List<LivenessInfo> livenessInfoList = new ArrayList<>();
             byte[] des = CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 90);
@@ -1012,13 +1011,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         }
     }
 
-    ;
-
     /**
      * 1vsn显示对比后成功是否窗口
      */
     private void showAlert() {
-
         if ((isOpenOneVsMore != false) || (Const.DELETETEMPLATE == false)) {
             if (AppData.getAppData().getCompareScore() <= SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && Const.ONE_VS_MORE_TIMEOUT_NUM >= Const.ONE_VS_MORE_TIMEOUT_MAXNUM) {
                 if (promptshow_xml.getVisibility() != View.VISIBLE) {
@@ -1086,7 +1082,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     }
 
     /**
-     * 1v1显示对比后成功是否窗口
+     * 1vs1显示对比后成功是否窗口
      */
     private void showAlertDialog() {
         String str = "";
@@ -1877,7 +1873,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 if (finishSign) {
                     IdCard.close();
                 }
-                if (!info.getName().contains("timeout") && ReaderCardFlag == true) {
+                if (!info.getName().contains("timeout") && ReaderCardFlag) {
                     isOpenOneVsMore = false;
                     ReaderCardFlag = false;
                     Message msg = new Message();
@@ -1885,8 +1881,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     msg.obj = info;
                     mHandler.sendMessage(msg);
                 }
-                mHandler.sendEmptyMessageDelayed(Const.MSG_READ_CARD, 2000);
-            } else {
+                if (SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)) {
+                    mHandler.sendEmptyMessageDelayed(Const.MSG_READ_CARD, 2000);
+                }
+            } else if (SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)){
                 mHandler.sendMessageDelayed(mHandler.obtainMessage(Const.MSG_READ_CARD, ""), 100);
             }
         }

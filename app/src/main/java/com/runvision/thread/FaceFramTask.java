@@ -66,7 +66,7 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
                 publishProgress(result.get(0).getRect());
 
                 Boolean live=true;
-                if(SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)==true) {
+                if(SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)) {
                     live = MyApplication.mFaceLibCore.Livingthing(des, 480, 640, result,livenessInfoList);
                 }
                 faceflag=true;
