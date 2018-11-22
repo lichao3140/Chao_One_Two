@@ -143,9 +143,9 @@ public class Const {
     public static final String KEY_TELEPHONE_NUMBER = "telephonenumber";
 
     /**
-     * 默认开启活体
+     * 默认关闭活体
      */
-    public static final boolean OPEN_LIVE = true;
+    public static final boolean OPEN_LIVE = false;
 
     /**
      * 默认开启1比N

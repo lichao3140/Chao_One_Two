@@ -1019,7 +1019,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             if (AppData.getAppData().getCompareScore() <= SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && Const.ONE_VS_MORE_TIMEOUT_NUM >= Const.ONE_VS_MORE_TIMEOUT_MAXNUM) {
                 if (promptshow_xml.getVisibility() != View.VISIBLE) {
                     Const.ONE_VS_MORE_TIMEOUT_NUM = 0;
-                    ShowPromptMessage("请刷身份证", 1);
+                    //ShowPromptMessage("请刷身份证", 1);
                 }
             } else if (AppData.getAppData().getCompareScore() > SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && AppData.getAppData().getNFaceBmp() != null) {
                 //防止连续两次识别
@@ -1057,7 +1057,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 } else {
                     GPIOHelper.openDoor(true);
                     PosUtil.setRelayPower(1);//开闸
-                    PosUtil.getWg26Status(23821899);
+//                    PosUtil.getWg26Status(23821899);
+//                    Log.i(TAG, "WG:" + PosUtil.getWg26Status(23821899));
 //                    showToast("Wg26:" + PosUtil.getWg26Status(136162));
                     mHandler.postDelayed(() -> {
                         GPIOHelper.openDoor(false);

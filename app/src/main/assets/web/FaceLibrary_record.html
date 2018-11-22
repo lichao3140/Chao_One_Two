@@ -168,10 +168,30 @@
     //文件域
     function filechange(){
     	var filevalue=$("#imgfiles").val();
+    	console.info(filevalue);
     	if(filevalue!=""){
     		$('#menubtn').css('background-color','#4aaa4a');
     		$('#menubtn').val('已选择');
-    	}
+            var pgone=document.getElementById("pg");
+
+            var filesize = $("#imgfiles")[0].files.length;
+
+            if(filesize>0){
+                //获取jpg文件总数
+                for(var a=0;a<filesize;a++){
+                    if($("#imgfiles")[0].files[a].type=="image/jpeg" || $("#imgfiles")[0].files[a].type=="image/png" || $("#imgfiles")[0].files[a].type=="image/bmp"){
+                        jpgcount++;
+                    }
+                }
+                pgone.max=jpgcount;
+                $("#all").html(jpgcount);
+                $("#now").html(completenum);
+            }else{
+                swal("警告","请选择非空文件夹！","warning");
+            }
+    	}else{
+            swal("警告","请选择非空文件夹！","warning");
+        }
     }
 
     //获取图片
@@ -247,7 +267,7 @@
                 	return;
                 }
                 if(addff_job_number==""){
-                	swal("警告","请输入工号！","warning");
+                	swal("警告","请输入工/卡号！","warning");
 					return;
                 }
                if(addff_card_id==""){
@@ -265,7 +285,7 @@
                     return;
                 }
                 if($("#addff_job_number").val().length>0&&$("#addff_job_number").val().match(/[\x01-\xFF]*/)==false){
-                    swal("警告","工号只能输入数字或字母","warning");
+                    swal("警告","工/卡号只能输入数字或字母","warning");
                     return;
                 }
                 if("0"!=$("#addff_age").val() && /^\+?[1-9][0-9]*$/.test($("#addff_age").val())==false ){
@@ -373,7 +393,7 @@
                         return;
 	                }
 	               if(addff_job_number==""){
-	                	swal("警告","请输入工号！","warning");
+	                	swal("警告","请输入工/卡号！","warning");
 	                	return;
 	                }
 	                if(addff_card_id==""){
@@ -391,7 +411,7 @@
                         return;
                     }
                     if($("#addff_job_number").val().length>0&&$("#addff_job_number").val().match(/[\x01-\xFF]*/)==false){
-                        swal("警告","工号只能输入数字或字母","warning");
+                        swal("警告","工/卡号只能输入数字或字母","warning");
                         return;
                     }
                     if("0"!=$("#addff_age").val() && /^\+?[1-9][0-9]*$/.test($("#addff_age").val())==false ){
@@ -452,12 +472,6 @@
         $("#updff_job_number").val("");
         $("#updff_card_id").val("");
         $("#updtopmodel").prop("src","img/addimg.png");
-
-		var file = $("#imgfile") ;
-		file.after(file.clone().val(""));
-		file.remove();
-        $("#menubtn").css("background-color","#fd1b30");
-        $("#menubtn").attr("value","选择目录");
 
         $("#batchtype").val("0");
         $("#batchgender").val("0");
@@ -526,7 +540,7 @@
                     return;
                 }
                 if($("#ff_job_number").val().length>0&&$("#ff_job_number").val().match(/[\x01-\xFF]*/)==false){
-                    swal("警告","工号只能输入数字或字母","warning");
+                    swal("警告","工/卡号只能输入数字或字母","warning");
                     return;
                 }
         }
@@ -700,15 +714,29 @@
 
     //打开批量导入面板
     function openbatchmodel(){
-        $("#loadescbtn").hide();
+        clearimport();
         $('#my-prompt3').modal({
             closeViaDimmer:false,
             relatedTarget: this,
+            closeOnCancel:false,
             onConfirm: function(e) {
 
             },
             onCancel: function(e) {
                 /*alert('不想说!');*/
+                //提示是否退出导入
+                $('#my-prompt5').modal({
+                    closeViaDimmer:false,
+                    relatedTarget: this,
+                    onConfirm: function(e) {
+                        loadstatu=0;
+                        $('#my-prompt3').modal("close");
+                    },
+                    onCancel: function(e) {
+                        /*alert('不想说!');*/
+                    }
+                });
+
             }
         });
     }
@@ -727,23 +755,42 @@
     function clearimport(){
         $("#dissbody").empty();
         $("#disstab").css("display","none");
+        $("#menubtn").css("background-color","#fd1b30");
+        $("#menubtn").attr("value","选择目录");
+        var file = document.getElementById('imgfiles');
+        file.outerHTML = file.outerHTML;
+        var pgone=document.getElementById("pg");
+        pgone.value=0;
+        pgone.max=0;
+        $("#all").html(0);
+        $("#now").html(0);
         jpgcount=0;
         completenum=0;
         successnum=0;
-        Importmodel();
+        loadstatu=0;
+        /*Importmodel();*/
     }
 
     //开始导入模板图片
     function Importmodel(){
 
+        var filesize = $("#imgfiles")[0].files.length;
 
-        var pgone=document.getElementById("pg");
+        if(filesize>0){
+            loadstatu=1;
+            loadmodel();
+        }else{
+            swal("警告","请选择非空文件夹！","warning");
+            loadstatu=0;
+        }
+
+
+        /*var pgone=document.getElementById("pg");
 
         var filesize = $("#imgfiles")[0].files.length;
 
         if(filesize>0){
             loadstatu=1;
-            $("#loadescbtn").show();
             //获取jpg文件总数
             for(var a=0;a<filesize;a++){
                 if($("#imgfiles")[0].files[a].type=="image/jpeg" || $("#imgfiles")[0].files[a].type=="image/png" || $("#imgfiles")[0].files[a].type=="image/bmp"){
@@ -758,7 +805,7 @@
         }else{
             swal("警告","请选择非空文件夹！","warning");
             loadstatu=0;
-        }
+        }*/
 
 
 
@@ -769,16 +816,11 @@
     }
     
     /* 关闭批量导入面板 */
-    function closemodel(){
+    /*function closemodel(){
         loadstatu=0;
     	$("#my-prompt3").modal('close');
-    }
+    }*/
 
-    //终止批量导入
-    function escload(){
-        loadstatu=0;
-        $("#loadescbtn").css("display","none");
-    }
 
     function loadmodel(){
     		var pgone=document.getElementById("pg");
@@ -845,13 +887,9 @@
                         sendInsert(filees,filenamemap,modeltype,gonghao,modelcardid,pgone);
                     }
                 }
-
 				}
     }
 
-    function twoloadmodel(){
-        loadmodel();
-    }
 
     //批量导入发送请求添加模板
     function sendInsert(filees,filenamemap,modeltype,gonghao,modelcardid,pgone){
@@ -983,7 +1021,7 @@
                                     <option value="1">男</option>
                                     <option value="2">女</option>
                                 </select><br>
-                                <span style="font-size:16px;line-height:26px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工号：</span><input
+                                <span style="font-size:16px;line-height:26px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工/卡号：</span><input
                                     type="text" id="ff_job_number"
                                     style="background-color: transparent;border:1px solid #bfbdbd;outline: none;"/>
                                 <span style="font-size:16px;line-height:26px;">&nbsp;&nbsp;&nbsp;&nbsp;证件号：</span><input
@@ -1031,7 +1069,7 @@
                                         <th>类型</th>
                                         <th>性别</th>
 										<th style="width:180px;">证件号</th>
-                                        <th>工号</th>
+                                        <th>工/卡号</th>
                                         <th>年龄</th>
                                     </tr>
                                     </thead>
@@ -1150,7 +1188,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right;">工号：</td>
+                            <td style="text-align: right;">工/卡号：</td>
                             <td style="text-align: left;" colspan="3"><input type="text"
                                                                              id="addff_job_number"
                                                                              style="border:1px solid #bfbdbd;outline: none;width:100%;"/>
@@ -1241,7 +1279,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="text-align: right;">工号：</td>
+                            <td style="text-align: right;">工/卡号：</td>
                             <td style="text-align: left;" colspan="3"><input type="text"
                                                                              id="updff_job_number"
                                                                              style="border:1px solid #bfbdbd;outline: none;width:100%;"/>
@@ -1303,20 +1341,19 @@
                                 <td colspan="2" style="text-align:center;">
                                     <progress id="pg" style="margin-top:10px;"></progress>
                                     <span id="pgbarcount"
-                                          style="display: block;position:absolute;width: 348px;height: 27px;top:60px;"><label
+                                          style="display: block;position:absolute;width: 268px;height: 27px;top:60px;left:67px;"><label
                                             id="now"></label> / <label
                                             id="all"></label></span><input
                                         type="button"
                                         style="outline: none;cursor: pointer;width:80px;height:30px;background-color:#4aaa4a;color:white;border-radius: 5px;margin-top:-20px;margin-left:10px;"
-                                        value="开始导入" id="loadbtn" onclick="clearimport()"/>
+                                        value="开始导入" id="loadbtn" onclick="Importmodel()"/>
                                     <input type="button" id="menubtn"
                                            style="outline: none;cursor: pointer;width:80px;height:30px;background-color:#e88f0b;margin-top:-20px;color:white;border-radius: 5px;"
                                            value="选择目录" onclick="$('#imgfiles').click();"/><input
                                         type="file" style="display:none;" id="imgfiles"
                                         accept="image/jpeg,image/jpg" onchange="filechange()"
                                         webkitdirectory>
-                                    <input type="buttom" id="loadescbtn"  style="text-align:center;outline: none;cursor: pointer;width:80px;height:30px;background-color:#fd1b30;margin-top:-20px;color:white;border-radius: 5px;" value="取消导入" onclick="escload()"/>
-                                </td>
+                                    </td>
                             </tr>
 
                         </table>
@@ -1330,12 +1367,29 @@
                             <tbody id="dissbody">
 
                             </tbody>
-                            <tr>
-                            	<td colspan="2"><input style="background-color:red;border-radius:5px;outline: none;cursor: pointer;color:white;width:80px;cursor:hand;text-align:center;height:25px;" value="关闭面板" onclick="closemodel()"></td>
-                            </tr>
                         </table>
                     </form>
                 </div>
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 退出导入提示面板 -->
+    <div class="am-modal am-modal-prompt"  tabindex="-4" id="my-prompt5">
+        <div class="am-modal-dialog" style="width:580px;height:160px;">
+            <div class="am-modal-hd" style="border-bottom:1px solid gray;text-align:center;">退出导入确认
+            </div>
+            <div class="am-modal-bd">
+                <div style="text-align: left;">
+                    <p>是否退出批量导入?</p>
+                </div>
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确定</span>
             </div>
         </div>
     </div>
