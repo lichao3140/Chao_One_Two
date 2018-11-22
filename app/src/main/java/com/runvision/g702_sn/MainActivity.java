@@ -823,7 +823,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     public void faceComperFrame(Bitmap bmp) {
         int num = 1;
         //提取人脸
-        while (num <= 50) {
+        while (num <= 10) {
             List<FaceInfo> result = new ArrayList<FaceInfo>();
             List<LivenessInfo> livenessInfoList = new ArrayList<>();
             byte[] des = CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 90);
@@ -834,7 +834,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 continue;
             }
             Boolean live = true;
-            if (SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE) == true) {
+            if (SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)) {
                 live = MyApplication.mFaceLibCore.Livingthing(des, 480, 640, result, livenessInfoList);
             }
             if (!live) {
