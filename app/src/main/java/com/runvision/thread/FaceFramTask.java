@@ -10,6 +10,7 @@ import android.util.Log;
 import com.arcsoft.face.LivenessInfo;
 import com.runvision.bean.AppData;
 import com.runvision.bean.FaceInfoss;
+import com.runvision.bean.FaceLibCore;
 import com.runvision.bean.ImageStack;
 import com.runvision.core.Const;
 import com.runvision.g702_sn.MyApplication;
@@ -81,6 +82,7 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
                 if (imageStack!=null) {
                     imageStack.clearAll();
                 }
+                FaceLibCore.not_Live = 0;
                 faceflag=false;
                 publishProgress(new Rect(0, 0, 0, 0));
             }
