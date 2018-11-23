@@ -20,6 +20,7 @@ public class FaceLibCore {
     private byte[] a = new byte[1];
     private byte[] b = new byte[1];
     public static int not_Live = 0;
+    public static int is_Live = 0;
 
     public int initLib(Context context) {
         int activeCode = faceEngine.active(context, Const.APP_ID, Const.SDK_KEY);
@@ -86,21 +87,26 @@ public class FaceLibCore {
             Log.i(TAG, "getLivenessScore: liveness " + code);
             if (code == 0) {
                 for (int i = 0; i < faceInfos.size(); i++) {
-                    if (livenessInfoList.get(i).getLiveness() == 1 && not_Live < 1) {
-                        not_Live = 0;
-                        Living_thing = true;
-                        Log.i("Gavin", "活体" + not_Live);
+                    if (livenessInfoList.get(i).getLiveness() == 1) {
+                        is_Live++;
+                        if (is_Live > 5 || not_Live < 1) {
+                            not_Live = 0;
+                            Living_thing = true;
+                            Log.i("Gavin", "活体");
+                        }
                     } else if (livenessInfoList.get(i).getLiveness() == 0) {
+                        is_Live = 0;
                         not_Live++;
                         Living_thing = false;
                         Log.i("Gavin", "未知或者非活体" + not_Live);
                     } else if (faceInfos.size() >= 1 && not_Live >= 1) {
+                        is_Live = 0;
                         not_Live++;
                         Living_thing = false;
                     }
                 }
             }  else {
-                Log.i("Gavin", "未知或者非活体");
+                is_Live = 0;
                 not_Live++;
                 Living_thing = false;
             }

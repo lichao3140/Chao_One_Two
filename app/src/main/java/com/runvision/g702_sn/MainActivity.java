@@ -999,7 +999,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
      */
     private void ShowPromptMessage(String showmessage, int audionum) {
         if (audionum == 1) {
-            playMusic(R.raw.burlcard);
+//            playMusic(R.raw.burlcard);
+            playMusic(R.raw.please_register_face);
         }
         if (audionum == 3) {
             playMusic(R.raw.blacklist);
@@ -1019,7 +1020,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             if (AppData.getAppData().getCompareScore() <= SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && Const.ONE_VS_MORE_TIMEOUT_NUM >= Const.ONE_VS_MORE_TIMEOUT_MAXNUM) {
                 if (promptshow_xml.getVisibility() != View.VISIBLE) {
                     Const.ONE_VS_MORE_TIMEOUT_NUM = 0;
-                    //ShowPromptMessage("请刷身份证", 1);
+                    ShowPromptMessage("请注册人脸", 1);
                 }
             } else if (AppData.getAppData().getCompareScore() > SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && AppData.getAppData().getNFaceBmp() != null) {
                 //防止连续两次识别
