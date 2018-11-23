@@ -126,6 +126,7 @@ public class Const {
     public static final String KEY_VMSPROT = "vmsProt";
     public static final String KEY_VMSUSERNAME = "vmsUserName";
     public static final String KEY_VMSPASSWORD = "vmsPassWord";
+    public static final String KEY_SETTING_PASSWORD = "settingPassWord";
 
     public static final String ATD_UP_STARTIME = "atd_up_startime";
     public static final String ATD_UP_ENDTIME  = "atd_up_endtime";
@@ -163,10 +164,9 @@ public class Const {
     public static final boolean OPEN_MUSIC = true;
 
     /**
-     * 10min无操作  返回待机页面  相机休眠
+     * 30min无操作  返回待机页面  相机休眠
      */
-    public static final int CLOSE_HOME_TIMEOUT = 10 * 1000;
-
+    public static final int CLOSE_HOME_TIMEOUT = 30;
 
     public static final int CLOSE_DOOR_TIME = 1;
 

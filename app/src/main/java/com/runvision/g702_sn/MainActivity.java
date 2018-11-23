@@ -1302,7 +1302,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 //int status = GPIOHelper.readStatus();
                 //G701  G702
                 int status = PosUtil.getPriximitySensorStatus();
-                status = 1;
+                //status = 1;
                 if (redflag == true) {
                     try {
                         Thread.sleep(1500);
@@ -1802,7 +1802,11 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             String confirmPsd = et_confirm_psd.getText().toString();
             String psd = Const.MOBILE_SAFE_PSD;
             if(!TextUtils.isEmpty(confirmPsd)){
-                if(psd.equals(confirmPsd)) {
+                if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals("") && psd.equals(confirmPsd)) {
+                    Intent intent = new Intent(mContext, RegisterActivity.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                } else if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals(confirmPsd)) {
                     Intent intent = new Intent(mContext, RegisterActivity.class);
                     startActivity(intent);
                     dialog.dismiss();

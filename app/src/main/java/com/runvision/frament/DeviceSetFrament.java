@@ -30,7 +30,7 @@ import java.lang.reflect.Field;
 public class DeviceSetFrament extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private View view;
-    private TextView threshold_1, threshold_n, wait_for_time, open_time, device_ip, vms_ip, vms_port, vms_uername, vms_password, version;
+    private TextView threshold_1, threshold_n, wait_for_time, open_time, device_ip, vms_ip, vms_port, vms_uername, vms_password, new_password, confirm_passwork, version;
     private CheckBox cb_choice, cb_choice_1, cb_choice_n;
     private Spinner Preservation_time;
     private Button btn_Sure, btn_Refresh;
@@ -51,28 +51,30 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
     }
 
     private void initView() {
-        version = (TextView) view.findViewById(R.id.version);
-        threshold_1 = (TextView) view.findViewById(R.id.threshold_1);
-        threshold_n = (TextView) view.findViewById(R.id.threshold_n);
-        wait_for_time = (TextView) view.findViewById(R.id.wait_for_time);
-        open_time = (TextView) view.findViewById(R.id.open_time);
-        device_ip = (TextView) view.findViewById(R.id.device_ip);
-        vms_ip = (TextView) view.findViewById(R.id.vms_ip);
-        vms_port = (TextView) view.findViewById(R.id.vms_port);
-        vms_uername = (TextView) view.findViewById(R.id.vms_uername);
-        vms_password = (TextView) view.findViewById(R.id.vms_password);
+        version = view.findViewById(R.id.version);
+        threshold_1 = view.findViewById(R.id.threshold_1);
+        threshold_n = view.findViewById(R.id.threshold_n);
+        wait_for_time = view.findViewById(R.id.wait_for_time);
+        open_time = view.findViewById(R.id.open_time);
+        device_ip = view.findViewById(R.id.device_ip);
+        vms_ip = view.findViewById(R.id.vms_ip);
+        vms_port = view.findViewById(R.id.vms_port);
+        vms_uername = view.findViewById(R.id.vms_uername);
+        vms_password = view.findViewById(R.id.vms_password);
+        new_password = view.findViewById(R.id.dialog_new_pwd);
+        confirm_passwork = view.findViewById(R.id.dialog_confirm_pwd);
 
-        cb_choice = (CheckBox) view.findViewById(R.id.cb_choice);
-        cb_choice_1 = (CheckBox) view.findViewById(R.id.cb_choice_1);
-        cb_choice_n = (CheckBox) view.findViewById(R.id.cb_choice_n);
+        cb_choice = view.findViewById(R.id.cb_choice);
+        cb_choice_1 = view.findViewById(R.id.cb_choice_1);
+        cb_choice_n = view.findViewById(R.id.cb_choice_n);
 
-        btn_Sure = (Button) view.findViewById(R.id.btn_Sure);
+        btn_Sure = view.findViewById(R.id.btn_Sure);
         btn_Sure.setOnClickListener(this);
 
-        btn_Refresh = (Button) view.findViewById(R.id.btn_Refresh);
+        btn_Refresh = view.findViewById(R.id.btn_Refresh);
         btn_Refresh.setOnClickListener(this);
 
-        Preservation_time = (Spinner) view.findViewById(R.id.Preservation_time);
+        Preservation_time = view.findViewById(R.id.Preservation_time);
         Preservation_time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -87,7 +89,6 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
                 } else if (sexNumber.equals("30天")) {
                     preservation_day = 30;
                 }
-
             }
 
             @Override
@@ -141,6 +142,7 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
         vms_port.setText(Integer.toString(SPUtil.getInt(Const.KEY_VMSPROT, 0)));
         vms_uername.setText(SPUtil.getString(Const.KEY_VMSUSERNAME, ""));
         vms_password.setText(SPUtil.getString(Const.KEY_VMSPASSWORD, ""));
+        SPUtil.putString(Const.KEY_SETTING_PASSWORD, "");
     }
 
     private void setData() {
@@ -176,6 +178,7 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
         SPUtil.putInt(Const.KEY_VMSPROT, Integer.parseInt(vms_port.getText().toString().trim()));
         SPUtil.putString(Const.KEY_VMSUSERNAME, vms_uername.getText().toString().trim());
         SPUtil.putString(Const.KEY_VMSPASSWORD, vms_password.getText().toString().trim());
+        SPUtil.putString(Const.KEY_SETTING_PASSWORD, confirm_passwork.getText().toString().trim());
 
         Amendsuccess();
         Const.WEB_UPDATE = true;
@@ -250,6 +253,8 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
             case R.id.btn_Sure:
                 if (!cb_choice_1.isChecked() && !cb_choice_n.isChecked()) {
                     Toast.makeText(mContext, "1:1和1:N不能同时关闭", Toast.LENGTH_LONG).show();
+                } else if (!new_password.getText().toString().trim().equals(confirm_passwork.getText().toString().trim())){
+                    Toast.makeText(mContext, "两次输入密码不一致，密码修改失败！", Toast.LENGTH_LONG).show();
                 } else {
                     setData();
                 }

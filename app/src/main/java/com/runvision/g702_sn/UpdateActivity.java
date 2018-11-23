@@ -318,7 +318,7 @@ public class UpdateActivity extends Activity {
                 for (File file1 : files) {
                     //判断是否是要更新的apk文件  1.是否是apk文件 2.更新apk前半部分名称是否相同 (UpdateApk)
                     if (checkIsApkFile(file1.getPath()) &&
-                            file1.getName().substring(0, 7).equals("G702_SN_AddVMS")) {
+                            file1.getName().substring(0, 7).equals("G702_AddVMS")) {
                         datas.add(file1.getName());//添加到本地数组中
                         Log.i(TAG, "ssss::: " + file1.getName());
                     }
