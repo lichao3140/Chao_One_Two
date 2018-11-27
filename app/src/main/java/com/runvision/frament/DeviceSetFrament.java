@@ -1,5 +1,6 @@
 package com.runvision.frament;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +40,8 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
     private Context mContext;
     private int preservation_day;
     private TimePickerDialog tpd;
-    private String isSelectTime;
+    private boolean select_begin = false;
+    private boolean select_end = false;
 
     @Nullable
     @Override
@@ -114,6 +116,17 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
         threshold_n.setText(String.valueOf(SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE)));
         wait_for_time.setText(String.valueOf(SPUtil.getInt(Const.KEY_BACKHOME, Const.CLOSE_HOME_TIMEOUT)));
         open_time.setText(String.valueOf(SPUtil.getInt(Const.KEY_OPENDOOR, Const.CLOSE_DOOR_TIME)));
+        if (SPUtil.getString(Const.STARTIME, "").equals("")) {
+            timeBegin.setText(Const.startime);
+        } else {
+            timeBegin.setText(SPUtil.getString(Const.STARTIME, ""));
+        }
+        if (SPUtil.getString(Const.ENDTIME, "").equals("")) {
+            timeEnd.setText(Const.endtime);
+        } else {
+            timeEnd.setText(SPUtil.getString(Const.ENDTIME, ""));
+        }
+
         device_ip.setText(CameraHelp.getIpAddress());
 
         //Preservation_time.set(SPUtil.getInt(Const.KEY_PRESERVATION_DAY,90));
@@ -159,9 +172,10 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
         SPUtil.addFloat(Const.KEY_ONEVSMORESCORE, Float.parseFloat(threshold_n.getText().toString().trim()));
         SPUtil.putInt(Const.KEY_BACKHOME, Integer.parseInt(wait_for_time.getText().toString().trim()));
         SPUtil.putInt(Const.KEY_OPENDOOR, Integer.parseInt(open_time.getText().toString().trim()));
+        SPUtil.putString(Const.STARTIME, timeBegin.getText().toString());
+        SPUtil.putString(Const.ENDTIME, timeEnd.getText().toString());
         //修改本地IP
         updateSetting(device_ip.getText().toString().trim(), getContext());
-
 
         SPUtil.putInt(Const.KEY_PRESERVATION_DAY, preservation_day);
 
@@ -272,12 +286,12 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
                 initData();
                 break;
             case R.id.select_sleep_time_begin:
+                select_begin = true;
                 selectTime();
-                timeBegin.setText(isSelectTime);
                 break;
             case R.id.select_sleep_time_end:
+                select_end = true;
                 selectTime();
-                timeEnd.setText(isSelectTime);
                 break;
             default:
                 break;
@@ -308,9 +322,18 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        isSelectTime = getString(R.string.radial_time_picker_result_value, hourOfDay, minute);
-//        timeBegin.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
-//        timeEnd.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
+        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+        String secondString = second < 10 ? "0"+second : ""+second;
+        if (select_begin) {
+            select_begin = false;
+            timeBegin.setText(hourString + ":" + minuteString);
+//            timeBegin.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+        } else if (select_end) {
+            select_end = false;
+            timeEnd.setText(hourString + ":" + minuteString);
+//            timeEnd.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+        }
     }
 
     @Override
