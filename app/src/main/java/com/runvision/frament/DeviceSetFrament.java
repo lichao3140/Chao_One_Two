@@ -18,19 +18,17 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.runvision.core.Const;
 import com.runvision.g702_sn.R;
 import com.runvision.utils.CameraHelp;
 import com.runvision.utils.LogToFile;
 import com.runvision.utils.SPUtil;
-
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import java.util.Calendar;
 import java.lang.reflect.Field;
 
 public class DeviceSetFrament extends android.support.v4.app.Fragment implements View.OnClickListener,
-        RadialTimePickerDialogFragment.OnTimeSetListener {
-
-    private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
+        TimePickerDialog.OnTimeSetListener {
 
     private View view;
     private TextView threshold_1, threshold_n, wait_for_time, open_time, device_ip, vms_ip, vms_port, vms_uername, vms_password;
@@ -40,6 +38,8 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
     private Button btn_Sure, btn_Refresh;
     private Context mContext;
     private int preservation_day;
+    private TimePickerDialog tpd;
+    private String isSelectTime;
 
     @Nullable
     @Override
@@ -272,12 +272,12 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
                 initData();
                 break;
             case R.id.select_sleep_time_begin:
-//                selectTime();
-                Toast.makeText(mContext, "begin", Toast.LENGTH_LONG).show();
+                selectTime();
+                timeBegin.setText(isSelectTime);
                 break;
             case R.id.select_sleep_time_end:
-//                selectTime();
-                Toast.makeText(mContext, "end", Toast.LENGTH_LONG).show();
+                selectTime();
+                timeEnd.setText(isSelectTime);
                 break;
             default:
                 break;
@@ -285,25 +285,39 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
     }
 
     private void selectTime() {
-        RadialTimePickerDialogFragment rtpd = new RadialTimePickerDialogFragment()
-                .setOnTimeSetListener(this)
-                .setForced24hFormat();
-        rtpd.show(getActivity().getSupportFragmentManager(), FRAG_TAG_TIME_PICKER);
+        Calendar now = Calendar.getInstance();
+        if (tpd == null) {
+            tpd = TimePickerDialog.newInstance(
+                    DeviceSetFrament.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    true
+            );
+        } else {
+            tpd.initialize(
+                    DeviceSetFrament.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    now.get(Calendar.SECOND),
+                    true
+            );
+        }
+        tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
     }
 
+
     @Override
-    public void onTimeSet(RadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
-        timeBegin.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
-        timeEnd.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        isSelectTime = getString(R.string.radial_time_picker_result_value, hourOfDay, minute);
+//        timeBegin.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+//        timeEnd.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        RadialTimePickerDialogFragment rtpd = (RadialTimePickerDialogFragment) getActivity().getSupportFragmentManager().findFragmentByTag(FRAG_TAG_TIME_PICKER);
-        if (rtpd != null) {
-            rtpd.setOnTimeSetListener(this);
-        }
+        TimePickerDialog tpd = (TimePickerDialog) getActivity().getFragmentManager().findFragmentByTag("Timepickerdialog");
+        if(tpd != null) tpd.setOnTimeSetListener(this);
     }
 
     @Override
