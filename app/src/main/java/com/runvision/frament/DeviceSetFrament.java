@@ -18,7 +18,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.runvision.core.Const;
 import com.runvision.g702_sn.R;
 import com.runvision.utils.CameraHelp;
@@ -27,10 +27,14 @@ import com.runvision.utils.SPUtil;
 
 import java.lang.reflect.Field;
 
-public class DeviceSetFrament extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class DeviceSetFrament extends android.support.v4.app.Fragment implements View.OnClickListener,
+        RadialTimePickerDialogFragment.OnTimeSetListener {
+
+    private static final String FRAG_TAG_TIME_PICKER = "timePickerDialogFragment";
 
     private View view;
-    private TextView threshold_1, threshold_n, wait_for_time, open_time, device_ip, vms_ip, vms_port, vms_uername, vms_password, new_password, confirm_passwork, version;
+    private TextView threshold_1, threshold_n, wait_for_time, open_time, device_ip, vms_ip, vms_port, vms_uername, vms_password;
+    private TextView timeBegin, timeEnd, new_password, confirm_passwork, version;
     private CheckBox cb_choice, cb_choice_1, cb_choice_n;
     private Spinner Preservation_time;
     private Button btn_Sure, btn_Refresh;
@@ -56,6 +60,11 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
         threshold_n = view.findViewById(R.id.threshold_n);
         wait_for_time = view.findViewById(R.id.wait_for_time);
         open_time = view.findViewById(R.id.open_time);
+        timeBegin = view.findViewById(R.id.select_sleep_time_begin);
+        timeEnd = view.findViewById(R.id.select_sleep_time_end);
+        timeBegin.setOnClickListener(this);
+        timeEnd.setOnClickListener(this);
+
         device_ip = view.findViewById(R.id.device_ip);
         vms_ip = view.findViewById(R.id.vms_ip);
         vms_port = view.findViewById(R.id.vms_port);
@@ -262,10 +271,43 @@ public class DeviceSetFrament extends android.support.v4.app.Fragment implements
             case R.id.btn_Refresh:
                 initData();
                 break;
+            case R.id.select_sleep_time_begin:
+//                selectTime();
+                Toast.makeText(mContext, "begin", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.select_sleep_time_end:
+//                selectTime();
+                Toast.makeText(mContext, "end", Toast.LENGTH_LONG).show();
+                break;
             default:
                 break;
         }
     }
 
+    private void selectTime() {
+        RadialTimePickerDialogFragment rtpd = new RadialTimePickerDialogFragment()
+                .setOnTimeSetListener(this)
+                .setForced24hFormat();
+        rtpd.show(getActivity().getSupportFragmentManager(), FRAG_TAG_TIME_PICKER);
+    }
 
+    @Override
+    public void onTimeSet(RadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
+        timeBegin.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+        timeEnd.setText(getString(R.string.radial_time_picker_result_value, hourOfDay, minute));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        RadialTimePickerDialogFragment rtpd = (RadialTimePickerDialogFragment) getActivity().getSupportFragmentManager().findFragmentByTag(FRAG_TAG_TIME_PICKER);
+        if (rtpd != null) {
+            rtpd.setOnTimeSetListener(this);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

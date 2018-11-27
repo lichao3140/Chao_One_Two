@@ -168,7 +168,10 @@ public class Const {
      */
     public static final int CLOSE_HOME_TIMEOUT = 30;
 
-    public static final int CLOSE_DOOR_TIME = 1;
+    /**
+     * 开门延时时间
+     */
+    public static final int CLOSE_DOOR_TIME = 2;
 
     public static Boolean BATCH_IMPORT_TEMPLATE=false;
     public static Boolean VMS_BATCH_IMPORT_TEMPLATE=false;

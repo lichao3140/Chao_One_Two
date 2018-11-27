@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">G701_AGM</string>
+    <string name="radial_time_picker_result_value">%1$d:%2$d</string>
 
     <string-array name="user_type">
         <item>未知</item>

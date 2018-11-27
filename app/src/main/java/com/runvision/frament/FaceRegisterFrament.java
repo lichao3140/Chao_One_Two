@@ -1,5 +1,6 @@
 package com.runvision.frament;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.FaceInfo;
+import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.runvision.bean.AppData;
 import com.runvision.core.Const;
 import com.runvision.db.User;
@@ -47,12 +49,12 @@ public class FaceRegisterFrament extends Fragment implements View.OnClickListene
     private View view;
     private Context mContext;
     private String TAG = this.getClass().getSimpleName();
-    private Button btn_openCamera, addFace, btn_startImport,btn_close;
+    private Button btn_openCamera, addFace, btn_startImport, btn_close;
     private ImageView imageView;
     private LinearLayout reg_chooseOneImage;
-    private TextView name, phone,age,idnum;
+    private TextView name, phone, age, idnum;
     private MyCameraSuf reg_MyCameraSuf;
-    private Spinner type,sex;
+    private Spinner type, sex;
     private boolean flag = true;
     private Bitmap reg_bmp = null;
     private String choose_type,choose_sex;
@@ -85,15 +87,15 @@ public class FaceRegisterFrament extends Fragment implements View.OnClickListene
     }
 
     private void initView() {
-        btn_openCamera = (Button) view.findViewById(R.id.btn_openPhone);
+        btn_openCamera = view.findViewById(R.id.btn_openPhone);
         btn_openCamera.setOnClickListener(this);
-        imageView = (ImageView) view.findViewById(R.id.choose_bitmap);
+        imageView = view.findViewById(R.id.choose_bitmap);
       //  btn_startImport = view.findViewById(R.id.btn_startImport);
       //  btn_startImport.setOnClickListener(this);
         reg_chooseOneImage = (LinearLayout) view.findViewById(R.id.reg_chooseOneImage);
-        name = (TextView) view.findViewById(R.id.reg_name);
-        phone = (TextView) view.findViewById(R.id.reg_phone);
-        type = (Spinner) view.findViewById(R.id.reg_type);
+        name = view.findViewById(R.id.reg_name);
+        phone = view.findViewById(R.id.reg_phone);
+        type = view.findViewById(R.id.reg_type);
         type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -166,12 +168,11 @@ public class FaceRegisterFrament extends Fragment implements View.OnClickListene
             case R.id.btn_openPhone:
                 openCamera();
                 break;
-
             case R.id.reg_addFace:
                 addFace();
                 break;
-           /// case R.id.btn_startImport:
-              //  batchImport();
+            // case R.id.btn_startImport:
+            //  batchImport();
             //    break;
             case R.id.reg_close:
                 close();
@@ -196,11 +197,11 @@ public class FaceRegisterFrament extends Fragment implements View.OnClickListene
 
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Const.REG_FACE) {
-                System.out.println("-----------3");
                 btn_openCamera.setText("开始抓拍");
                 btn_openCamera.setBackgroundColor(Color.parseColor("#cccccc"));
                 reg_bmp = AppData.getAppData().getFaceBmp();

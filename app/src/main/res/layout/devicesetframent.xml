@@ -77,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="等待待机时间："
+                android:text="进入休眠时间："
                 android:textColor="#747272"
                 android:textSize="20sp" />
 
@@ -116,6 +116,38 @@
                 android:textColor="#747272" />
         </LinearLayout>
 
+        <!-- 休眠时间段选择   -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="休眠时间段选择："
+                android:textColor="#747272"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/select_sleep_time_begin"
+                android:layout_width="80px"
+                android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/line"
+                android:text="23:00"
+                android:textSize="20sp"
+                android:textColor="#747272" />
+
+            <TextView
+                android:id="@+id/select_sleep_time_end"
+                android:layout_width="80px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:drawableBottom="@drawable/line"
+                android:text="06:00"
+                android:textSize="20sp"
+                android:textColor="#747272" />
+        </LinearLayout>
 
         <!-- 本机静态IP   -->
         <LinearLayout
@@ -127,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="本机 静态IP："
+                android:text="本机静态IP："
                 android:textColor="#747272"
                 android:textSize="20sp" />
 
@@ -383,7 +415,7 @@
 
         </LinearLayout>
 
-        <!-- 确认密 码 -->
+        <!-- 确认密码 -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
