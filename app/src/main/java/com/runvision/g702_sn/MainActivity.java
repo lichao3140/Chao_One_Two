@@ -1058,9 +1058,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 } else {
                     GPIOHelper.openDoor(true);
                     PosUtil.setRelayPower(1);//开闸
-//                    PosUtil.getWg26Status(23821899);
+                    PosUtil.getWg34Status(13701163);
 //                    Log.i(TAG, "WG:" + PosUtil.getWg26Status(23821899));
-//                    showToast("Wg26:" + PosUtil.getWg26Status(136162));
+                    showToast("Wg34:" + PosUtil.getWg34Status(13701163));
                     mHandler.postDelayed(() -> {
                         GPIOHelper.openDoor(false);
                         PosUtil.setRelayPower(0);//关闸

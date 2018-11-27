@@ -79,7 +79,7 @@ public class UpdateAppConfig implements RequestHandler {
         SPUtil.putString(Const.KEY_EDITION, SPUtil.getString(Const.KEY_EDITION, ""));
 
         String telephonenumber = params.get("telephonenumber");
-        SPUtil.putString(Const.KEY_TELEPHONE_NUMBER, "0755-83532659");
+        SPUtil.putString(Const.KEY_TELEPHONE_NUMBER, telephonenumber);
 
         Const.WEB_UPDATE=true;
 
