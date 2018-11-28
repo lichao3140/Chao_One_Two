@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -1792,37 +1793,23 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(this, R.layout.dialog_confirm_psd, null);
-        //让对话框显示一个自己定义的对话框界面效果
-        dialog.setView(view);
-        dialog.show();
-        Button bt_submit = view.findViewById(R.id.bt_submit);
-        Button bt_cancel = view.findViewById(R.id.bt_cancel);
-
-        bt_submit.setOnClickListener(v -> {
-            EditText et_confirm_psd = view.findViewById(R.id.et_confirm_psd);
-            String confirmPsd = et_confirm_psd.getText().toString();
-            String psd = Const.MOBILE_SAFE_PSD;
-            if(!TextUtils.isEmpty(confirmPsd)){
-                if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals("") && psd.equals(confirmPsd)) {
-                    Intent intent = new Intent(mContext, RegisterActivity.class);
-                    startActivity(intent);
-                    dialog.dismiss();
-                } else if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals(confirmPsd)) {
-                    Intent intent = new Intent(mContext, RegisterActivity.class);
-                    startActivity(intent);
-                    dialog.dismiss();
-                } else {
-                    showToast("输入密码错误");
-                }
-            }else{
-                showToast("请输入密码");
+        VerificationCodeInput input = view.findViewById(R.id.verificationCodeInput);
+        String psd = Const.MOBILE_SAFE_PSD;
+        input.setOnCompleteListener(content -> {
+            if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals("") && psd.equals(content)) {
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+            } else if (SPUtil.getString(Const.KEY_SETTING_PASSWORD, "").equals(content)) {
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+            } else {
+                showToast("输入密码错误");
             }
         });
-
-        bt_cancel.setOnClickListener(view1 -> {
-            isOpenOneVsMore = true;
-            dialog.dismiss();
-        });
+        dialog.setView(view);
+        dialog.show();
     }
 
     /******************串口身份证读卡******************/
