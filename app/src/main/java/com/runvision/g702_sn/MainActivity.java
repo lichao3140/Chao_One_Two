@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -26,14 +25,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.FaceSimilar;
@@ -1021,7 +1017,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             if (AppData.getAppData().getCompareScore() <= SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && Const.ONE_VS_MORE_TIMEOUT_NUM >= Const.ONE_VS_MORE_TIMEOUT_MAXNUM) {
                 if (promptshow_xml.getVisibility() != View.VISIBLE) {
                     Const.ONE_VS_MORE_TIMEOUT_NUM = 0;
-                    ShowPromptMessage("请注册人脸", 1);
+                    ShowPromptMessage("请联系管理员或注册人脸", 1);
                 }
             } else if (AppData.getAppData().getCompareScore() > SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE) && AppData.getAppData().getNFaceBmp() != null) {
                 //防止连续两次识别
@@ -1104,7 +1100,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         card_nation.setText(AppData.getAppData().getNation());
         faceBmp_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         if ((AppData.getAppData().getoneCompareScore() == 0) || (AppData.getAppData().getoneCompareScore() < SPUtil.getFloat(Const.KEY_CARDSCORE, Const.ONEVSONE_SCORE) && AppData.getAppData().getOneFaceBmp() != null)) {
-            str = "失败";
+            str = "核验失败，请联系管理员";
             isSuccessComper.setImageResource(R.mipmap.icon_sb);
             if (AppData.getAppData().getOneFaceBmp() == null) {
                 faceBmp_view.setImageResource(R.mipmap.tx);
@@ -1128,7 +1124,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             alert.setVisibility(View.VISIBLE);
             playMusic(R.raw.error);
         } else if (AppData.getAppData().getOneFaceBmp() != null && AppData.getAppData().getoneCompareScore() >= SPUtil.getFloat(Const.KEY_CARDSCORE, Const.ONEVSONE_SCORE)) {
-            str = "成功";
+            str = "核验成功，请通行";
             playMusic(R.raw.success);
             isSuccessComper.setImageResource(R.mipmap.icon_tg);
             faceBmp_view.setImageBitmap(AppData.getAppData().getOneFaceBmp());

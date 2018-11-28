@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-
+/**
+ * 密码验证
+ */
 public class VerificationCodeInput extends ViewGroup {
 
     private final static String TYPE_NUMBER = "number";
