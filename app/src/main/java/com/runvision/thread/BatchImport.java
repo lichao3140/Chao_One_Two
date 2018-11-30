@@ -68,7 +68,7 @@ public class BatchImport implements Runnable {
             //生成随机图片ID
             String imageID = IDUtils.genImageName();
             FileUtils.saveFile(bitmap, imageID, "FaceTemplate");
-            User user = new User(strs[0], strs[1], strs[2], Integer.parseInt(strs[3]), strs[4], strs[5], imageID,DateTimeUtils.getTime());
+            User user = new User(strs[0], strs[1], strs[2], Integer.parseInt(strs[3]), strs[4], strs[5], imageID, DateTimeUtils.getTime());
             int id = MyApplication.faceProvider.addUserOutId(user);
 
             if (nv21 == null) {
@@ -97,7 +97,6 @@ public class BatchImport implements Runnable {
                     //   generateTemplate = true;
                     System.out.println("存入模板库");
                     Log.i("Gavin", "存入模板库:");
-
                     file.delete();
                     sendMsg(i);
                 } else {
@@ -107,7 +106,8 @@ public class BatchImport implements Runnable {
                     // error++;
                     FileUtils.deleteTempter(imageID, "FaceTemplate");
                     //FileUtils.saveFile(bitmap, userName, "errorImage");
-                    /// publishProgress();
+                    //publishProgress();
+                    Log.i("Gavin", "人脸算法失败:" );
                     sendMsg(i);
                     continue;
                 }
@@ -117,7 +117,6 @@ public class BatchImport implements Runnable {
                 FileUtils.deleteTempter(imageID, "FaceTemplate");
                 //FileUtils.saveFile(bitmap, userName, "errorImage");
                 // publishProgress();
-                System.out.println("人脸定位失败");
                 Log.i("Gavin", "人脸定位失败:" );
                 sendMsg(i);
                 continue;

@@ -69,20 +69,20 @@ public class SendData {
     public static void sendComperMsgInfo(SocketThread socketThread, boolean flag, char type) {
         byte[] cardByte = new byte[0];
         byte[] faceByte = new byte[0];
+        //对比图片
         if(type == Const.TYPE_ONEVSMORE) {
-            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getNFaceBmp()!=null) {
+            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getNFaceBmp() != null) {
                 cardByte = ConversionHelp.bitmapToByte(AppData.getAppData().getCardBmp());
                 faceByte = ConversionHelp.bitmapToByte(AppData.getAppData().getNFaceBmp());
             }
-        }
-        else
-        {
-            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getOneFaceBmp()!=null) {
+        } else {
+            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getOneFaceBmp() != null) {
                 cardByte = ConversionHelp.bitmapToByte(AppData.getAppData().getCardBmp());
                 faceByte = ConversionHelp.bitmapToByte(AppData.getAppData().getOneFaceBmp());
             }
         }
 
+        //要发送的数据
         byte[] sendComperMsgData = new byte[1306 + cardByte.length + faceByte.length];
         byte[] temp = null;
         temp = ConversionHelp.intToByte(SPUtil.getInt("UUID", 0));
@@ -105,13 +105,11 @@ public class SendData {
         System.arraycopy(temp, 0, sendComperMsgData, 101, temp.length);
 
 
-
         if(type == Const.TYPE_ONEVSMORE) {
             Log.i("Gavin", "Score:" + AppData.getAppData().getCompareScore());
             temp = ConversionHelp.intToByte((int) (AppData.getAppData().getCompareScore() * 100) * 1000000);
             System.arraycopy(temp, 0, sendComperMsgData, 102, temp.length);
-        }else
-        {
+        } else {
             temp = ConversionHelp.intToByte((int) (AppData.getAppData().getoneCompareScore() * 100) * 1000000);
             System.arraycopy(temp, 0, sendComperMsgData, 102, temp.length);
         }
@@ -126,16 +124,13 @@ public class SendData {
             System.arraycopy(temp, 0, sendComperMsgData, 110, temp.length);
         }
         //2个字节跳过
-        //
         if (type == Const.TYPE_ONEVSMORE) {
-            //temp = "123456789".getBytes();
             temp=AppData.getAppData().getUser().getCardNo().getBytes();
             System.arraycopy(temp, 0, sendComperMsgData, 112, temp.length);
         } else {
             temp = AppData.getAppData().getCardNo().getBytes();
             System.arraycopy(temp, 0, sendComperMsgData, 112, temp.length);
         }
-
 
         Log.e("SocketThread", "name:" + AppData.getAppData().getName());
         try {
@@ -155,19 +150,12 @@ public class SendData {
                 temp = ConversionHelp.charToByte((char) 0x02);
             }
             System.arraycopy(temp, 0, sendComperMsgData, 208, temp.length);
-        }
-        else
-        {
-            if(AppData.getAppData().getUser().getSex().equals("男"))
-            {
+        } else {
+            if(AppData.getAppData().getUser().getSex().equals("男")) {
                 temp = ConversionHelp.charToByte((char) 0x01);
-            }
-            else if(AppData.getAppData().getUser().getSex().equals("女"))
-            {
+            } else if(AppData.getAppData().getUser().getSex().equals("女")) {
                 temp = ConversionHelp.charToByte((char) 0x02);
-            }
-            else
-            {
+            } else {
                 temp = ConversionHelp.charToByte((char) 0x00);
             }
             System.arraycopy(temp, 0, sendComperMsgData, 208, temp.length);
@@ -209,9 +197,17 @@ public class SendData {
         //添加face图片
         System.arraycopy(faceByte, 0, sendComperMsgData, 1302 + cardByte.length + 4, faceByte.length);
 
+        //socket发送数据
         socketThread.mSend(getSendData(Const.NMSG_FACE_CMPRESULT, sendComperMsgData));
 
         AppData.getAppData().clean();
+    }
+
+    /**
+     * 发送VMS下发模板不能建模的数据
+     * @param socketThread
+     */
+    public static void sendFaileMsgInfo(SocketThread socketThread) {
 
     }
 

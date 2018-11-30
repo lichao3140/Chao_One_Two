@@ -1055,9 +1055,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 } else {
                     GPIOHelper.openDoor(true);
                     PosUtil.setRelayPower(1);//开闸
-                    PosUtil.getWg34Status(13701163);
+//                    PosUtil.getWg34Status(13701163);
 //                    Log.i(TAG, "WG:" + PosUtil.getWg26Status(23821899));
-                    showToast("Wg34:" + PosUtil.getWg34Status(13701163));
+//                    showToast("Wg34:" + PosUtil.getWg34Status(13701163));
                     mHandler.postDelayed(() -> {
                         GPIOHelper.openDoor(false);
                         PosUtil.setRelayPower(0);//关闸
@@ -1066,7 +1066,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     playMusic(R.raw.success);
                     mHandler.postDelayed(() -> oneVsMoreView.setVisibility(View.GONE), 1000);
                 }
-
+                //发送到VMS
                 if (socketThread != null) {
                     SendData.sendComperMsgInfo(socketThread, true, Const.TYPE_ONEVSMORE);
                 } else {
@@ -1569,6 +1569,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             BatchImport impory = new BatchImport(dataList1, mHandler, loadFlag[0]);
             Thread thread = new Thread(impory);
             thread.start();
+            Log.i("lichao", "一个线程");
         } else if (parts == 3) {
             BatchImport impory1 = new BatchImport(dataList1, mHandler, loadFlag[0]);
             Thread thread1 = new Thread(impory1);
@@ -1581,6 +1582,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             BatchImport impory3 = new BatchImport(dataList3, mHandler, loadFlag[2]);
             Thread thread3 = new Thread(impory3);
             thread3.start();
+            Log.i("lichao", "三个线程");
         }
     }
 
@@ -1705,11 +1707,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             e.printStackTrace();
         }
 
-        sbstdOut.append(new BufferedReader(new InputStreamReader(proc
-                .getInputStream())));
-        sbstdErr.append(new BufferedReader(new InputStreamReader(proc
-                .getErrorStream())));
+        sbstdOut.append(new BufferedReader(new InputStreamReader(proc.getInputStream())));
+        sbstdErr.append(new BufferedReader(new InputStreamReader(proc.getErrorStream())));
         if (proc.exitValue() != 0) {
+
         }
     }
 

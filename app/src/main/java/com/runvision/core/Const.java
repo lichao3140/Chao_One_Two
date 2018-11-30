@@ -92,6 +92,8 @@ public class Const {
     public final static int NMSG_DCHNL_SET = 0x10020200;
     //收到模版
     public final static int NMSG_FLIB_ADD = 0x00010100;
+    //下发模板错误信息
+    public final static int NMSG_FLIB_ISSUED_ERRORINFO = 0x00010802;
 
     public final static char TYPE_CARD = 0x01;
     public final static char TYPE_ONEVSMORE = 0x02;
