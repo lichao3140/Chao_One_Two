@@ -492,7 +492,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     // progesssValue1.setText(success1 + "/" + dataList1.size());
                     //  progesss1.setProgress(b);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        // batchDialog.dismiss();
+                        //batchDialog.dismiss();
                         mHandler.postDelayed(() -> {
                             Const.VMS_TEMPLATE = true;
                             Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -507,12 +507,11 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     // progesssValue2.setText(success2 + "/" + dataList2.size());
                     // progesss2.setProgress(b2);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        // batchDialog.dismiss();
+                        //batchDialog.dismiss();
                         mHandler.postDelayed(() -> {
                             Const.VMS_TEMPLATE = true;
                             Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                         }, 2000);
-
                     }
                     break;
                 case 103:/*VMS批量导入结束操作*/
