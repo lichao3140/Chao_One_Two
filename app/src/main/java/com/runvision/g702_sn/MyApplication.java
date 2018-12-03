@@ -18,6 +18,7 @@ import com.runvision.core.Const;
 import com.runvision.db.Admin;
 import com.runvision.db.FaceProvider;
 import com.runvision.gpio.GPIOHelper;
+import com.runvision.thread.CrashHandler;
 import com.runvision.utils.CameraHelp;
 import com.runvision.utils.FileUtils;
 import com.runvision.utils.LogToFile;
@@ -43,6 +44,7 @@ public class MyApplication extends Application {
     private static MyApplication myApplication;
     public static FaceProvider faceProvider;
     public static FaceLibCore mFaceLibCore = new FaceLibCore();
+    CrashHandler crashHandler = null;
 
     public static Map<String,byte[]> mList = new HashMap<String,byte[]>();
 
@@ -93,7 +95,11 @@ public class MyApplication extends Application {
 
         loadTemper();
         SPUtil.putString(Const.KEY_EDITION, "(V "+LogToFile.getAppVersionName(getContext())+")");
+        //Bugly Crash获取
         CrashReport.initCrashReport(getApplicationContext());
+        //Crash本地保存
+        crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
     }
 
     /**
