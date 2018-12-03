@@ -22,6 +22,7 @@ import com.runvision.utils.CameraHelp;
 import com.runvision.utils.FileUtils;
 import com.runvision.utils.LogToFile;
 import com.runvision.utils.SPUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -92,7 +93,7 @@ public class MyApplication extends Application {
 
         loadTemper();
         SPUtil.putString(Const.KEY_EDITION, "(V "+LogToFile.getAppVersionName(getContext())+")");
-
+        CrashReport.initCrashReport(getApplicationContext());
     }
 
     /**
