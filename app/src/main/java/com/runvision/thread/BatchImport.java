@@ -51,7 +51,8 @@ public class BatchImport implements Runnable {
         try {
             for (int i = 1; i <= num; i++) {
                 File file = mList.get(i - 1);
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), FileUtils.getBitmapOption(2));
+                //解码图片 2为压缩图片  1不压缩
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), FileUtils.getBitmapOption(1));
                 bitmap =CameraHelp.alignBitmapForNv21(bitmap);//裁剪
                 int w = bitmap.getWidth();
                 int h = bitmap.getHeight();
