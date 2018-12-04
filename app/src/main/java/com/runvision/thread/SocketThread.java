@@ -134,6 +134,8 @@ public class SocketThread extends Thread {
             super.run();
             try {
                 FileUtils.cleanDir("SocketImage");
+                //删除文件目录接收数据缺失
+                //FileUtils.deleteDirectory(Const.SdCardDir);
                 analysisTempterStr(str);
             } catch (UnsupportedEncodingException e) {
                 System.out.println("--------------------");

@@ -187,6 +187,7 @@ public class Const {
 
      public static String Templatepath = Environment.getExternalStorageDirectory() + "/FaceAndroid/Template/";
      public static String ImagePath = Environment.getExternalStorageDirectory() + "/FaceAndroid/FaceTemplate/";
+     public static String SdCardDir = Environment.getExternalStorageDirectory() + "/SocketImage/";
 
      public static boolean WEB_UPDATE=false;
      public static boolean DELETETEMPLATE=false;
