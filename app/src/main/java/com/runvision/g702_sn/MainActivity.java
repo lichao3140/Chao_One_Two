@@ -179,7 +179,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Const.UPDATE_UI://更新UI
-
+                    //删除模板
                     if (Const.DELETETEMPLATE == true) {
                         mHandler.removeMessages(Const.MSG_FACE);
                         mHandler.removeMessages(Const.COMPER_END);
@@ -264,25 +264,29 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     }
 
                     /*显示逻辑*/
-                    if (promptshow_xml.getVisibility() == View.VISIBLE) {
+                    if(promptshow_xml.getVisibility()==View.VISIBLE)
+                    {
                         oneVsMoreView.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
                         // home_layout.setVisibility(View.GONE);
                     }
-                    if (alert.getVisibility() == View.VISIBLE) {
+                    if(alert.getVisibility()==View.VISIBLE)
+                    {
                         // AppData.getAppData().setCompareScore(0);
                         home_layout.setVisibility(View.GONE);
                         oneVsMoreView.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
                     }
-                    if (home_layout.getVisibility() == View.VISIBLE) {
+                    if(home_layout.getVisibility()==View.VISIBLE)
+                    {
                         oneVsMoreView.setVisibility(View.GONE);
                         // promptshow_xml.setVisibility(View.GONE);
                         alert.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
-                        Infra_red = false;
+                        Infra_red=false;
                     }
-                    if (isOpenOneVsMore == false) {
+                    if(isOpenOneVsMore==false)
+                    {
                         mHandler.removeMessages(Const.COMPER_END);
                         mHandler.removeMessages(Const.MSG_FACE);
                     }
@@ -326,8 +330,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         templatenum++;
                     }
 
-                    if ((templatenum == 20) || (Const.VMS_TEMPLATE == true)) {
-                        Const.VMS_TEMPLATE = false;
+                    if ((templatenum == 20) || (Const.VMS_TEMPLATE >= 20)) {
+                        Const.VMS_TEMPLATE = 0;
                         Log.i("Gavin_debug", "templatenum==20");
                         promptshow_xml.setVisibility(View.GONE);
                         cancelToast();
@@ -487,30 +491,24 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     int success1 = (int) msg.obj;
                     bacthOk1 = success1;
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        mHandler.postDelayed(() -> {
-                            Const.VMS_TEMPLATE = true;
-                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                        }, 2000);
+                        Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
+                        Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                     }
                     break;
                 case 102:/*VMS批量导入结束操作*/
                     int success2 = (int) msg.obj;
                     bacthOk2 = success2;
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        mHandler.postDelayed(() -> {
-                            Const.VMS_TEMPLATE = true;
-                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                        }, 2000);
+                        Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
+                        Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                     }
                     break;
                 case 103:/*VMS批量导入结束操作*/
                     int success3 = (int) msg.obj;
                     bacthOk3 = success3;
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        mHandler.postDelayed(() -> {
-                            Const.VMS_TEMPLATE = true;
-                            Const.VMS_BATCH_IMPORT_TEMPLATE = false;
-                        }, 2000);
+                        Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
+                        Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                     }
                     break;
                 default:
@@ -1541,7 +1539,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         bacthOk1 = 0;
         bacthOk2 = 0;
         bacthOk3 = 0;
-        Const.VMS_BATCH_IMPORT_TEMPLATE=true;
+        Const.VMS_BATCH_IMPORT_TEMPLATE = true;
 
         System.out.println("一共：" + mSum);
         //将文件数据分成三个集合
