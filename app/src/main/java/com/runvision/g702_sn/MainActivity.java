@@ -486,12 +486,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 101:/*VMS批量导入结束操作*/
                     int success1 = (int) msg.obj;
                     bacthOk1 = success1;
-                    double a = (double) success1 / (double) dataList1.size();
-                    int b = (int) (a * 100);
-                    // progesssValue1.setText(success1 + "/" + dataList1.size());
-                    //  progesss1.setProgress(b);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        //batchDialog.dismiss();
                         mHandler.postDelayed(() -> {
                             Const.VMS_TEMPLATE = true;
                             Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -501,12 +496,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 102:/*VMS批量导入结束操作*/
                     int success2 = (int) msg.obj;
                     bacthOk2 = success2;
-                    double a2 = (double) success2 / (double) dataList2.size();
-                    int b2 = (int) (a2 * 100);
-                    // progesssValue2.setText(success2 + "/" + dataList2.size());
-                    // progesss2.setProgress(b2);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        //batchDialog.dismiss();
                         mHandler.postDelayed(() -> {
                             Const.VMS_TEMPLATE = true;
                             Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -516,12 +506,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 103:/*VMS批量导入结束操作*/
                     int success3 = (int) msg.obj;
                     bacthOk3 = success3;
-                    double a3 = (double) success3 / (double) dataList3.size();
-                    int b3 = (int) (a3 * 100);
-                    // progesssValue3.setText(success3 + "/" + dataList3.size());
-                    //  progesss3.setProgress(b3);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
-                        // batchDialog.dismiss();
                         mHandler.postDelayed(() -> {
                             Const.VMS_TEMPLATE = true;
                             Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -1519,9 +1504,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private int[] loadFlag = {101, 102, 103};
     private int bacthOk1, bacthOk2, bacthOk3 = 0;
     private int parts = 0;
-    private ProgressBar progesss1, progesss2, progesss3;
-    private TextView progesssValue1, progesssValue2, progesssValue3;
-    private Dialog batchDialog;
 
     private List<File> getImagePathFile() {
         String strPath = Environment.getExternalStorageDirectory() + "/SocketImage/";
