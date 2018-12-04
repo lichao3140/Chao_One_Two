@@ -93,7 +93,7 @@ public class Const {
     //收到模版
     public final static int NMSG_FLIB_ADD = 0x00010100;
     //下发模板错误信息
-    public final static int NMSG_FLIB_ISSUED_ERRORINFO = 0x00010802;
+    public final static int NMSG_ERROR_MSG = 0x00010802;
 
     public final static char TYPE_CARD = 0x01;
     public final static char TYPE_ONEVSMORE = 0x02;
@@ -175,13 +175,13 @@ public class Const {
      */
     public static final int CLOSE_DOOR_TIME = 2;
 
-    public static Boolean BATCH_IMPORT_TEMPLATE=false;
-    public static Boolean VMS_BATCH_IMPORT_TEMPLATE=false;
-    public static Boolean VMS_TEMPLATE=false;
+    public static Boolean BATCH_IMPORT_TEMPLATE = false;
+    public static Boolean VMS_BATCH_IMPORT_TEMPLATE = false;
+    public static Boolean VMS_TEMPLATE = false;
 
-    public static int BATCH_FLAG=0;
+    public static int BATCH_FLAG = 0;
 
-    public static boolean UPDATE_IP=false;
+    public static boolean UPDATE_IP = false;
 
     //public static Boolean BATCH_IMPORT_TEMPLATE=false;
 

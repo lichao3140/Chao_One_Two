@@ -69,20 +69,20 @@ public class SendData {
     public static void sendComperMsgInfo(SocketThread socketThread, boolean flag, char type) {
         byte[] cardByte = new byte[0];
         byte[] faceByte = new byte[0];
-        //对比图片
         if(type == Const.TYPE_ONEVSMORE) {
-            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getNFaceBmp() != null) {
+            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getNFaceBmp()!=null) {
                 cardByte = ConversionHelp.bitmapToByte(AppData.getAppData().getCardBmp());
                 faceByte = ConversionHelp.bitmapToByte(AppData.getAppData().getNFaceBmp());
             }
-        } else {
-            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getOneFaceBmp() != null) {
+        }
+        else
+        {
+            if(AppData.getAppData().getCardBmp()!=null&&AppData.getAppData().getOneFaceBmp()!=null) {
                 cardByte = ConversionHelp.bitmapToByte(AppData.getAppData().getCardBmp());
                 faceByte = ConversionHelp.bitmapToByte(AppData.getAppData().getOneFaceBmp());
             }
         }
 
-        //要发送的数据
         byte[] sendComperMsgData = new byte[1306 + cardByte.length + faceByte.length];
         byte[] temp = null;
         temp = ConversionHelp.intToByte(SPUtil.getInt("UUID", 0));
@@ -105,11 +105,13 @@ public class SendData {
         System.arraycopy(temp, 0, sendComperMsgData, 101, temp.length);
 
 
+
         if(type == Const.TYPE_ONEVSMORE) {
             Log.i("Gavin", "Score:" + AppData.getAppData().getCompareScore());
             temp = ConversionHelp.intToByte((int) (AppData.getAppData().getCompareScore() * 100) * 1000000);
             System.arraycopy(temp, 0, sendComperMsgData, 102, temp.length);
-        } else {
+        }else
+        {
             temp = ConversionHelp.intToByte((int) (AppData.getAppData().getoneCompareScore() * 100) * 1000000);
             System.arraycopy(temp, 0, sendComperMsgData, 102, temp.length);
         }
@@ -124,13 +126,16 @@ public class SendData {
             System.arraycopy(temp, 0, sendComperMsgData, 110, temp.length);
         }
         //2个字节跳过
+        //
         if (type == Const.TYPE_ONEVSMORE) {
+            //temp = "123456789".getBytes();
             temp=AppData.getAppData().getUser().getCardNo().getBytes();
             System.arraycopy(temp, 0, sendComperMsgData, 112, temp.length);
         } else {
             temp = AppData.getAppData().getCardNo().getBytes();
             System.arraycopy(temp, 0, sendComperMsgData, 112, temp.length);
         }
+
 
         Log.e("SocketThread", "name:" + AppData.getAppData().getName());
         try {
@@ -150,12 +155,19 @@ public class SendData {
                 temp = ConversionHelp.charToByte((char) 0x02);
             }
             System.arraycopy(temp, 0, sendComperMsgData, 208, temp.length);
-        } else {
-            if(AppData.getAppData().getUser().getSex().equals("男")) {
+        }
+        else
+        {
+            if(AppData.getAppData().getUser().getSex().equals("男"))
+            {
                 temp = ConversionHelp.charToByte((char) 0x01);
-            } else if(AppData.getAppData().getUser().getSex().equals("女")) {
+            }
+            else if(AppData.getAppData().getUser().getSex().equals("女"))
+            {
                 temp = ConversionHelp.charToByte((char) 0x02);
-            } else {
+            }
+            else
+            {
                 temp = ConversionHelp.charToByte((char) 0x00);
             }
             System.arraycopy(temp, 0, sendComperMsgData, 208, temp.length);
@@ -197,17 +209,9 @@ public class SendData {
         //添加face图片
         System.arraycopy(faceByte, 0, sendComperMsgData, 1302 + cardByte.length + 4, faceByte.length);
 
-        //socket发送数据
         socketThread.mSend(getSendData(Const.NMSG_FACE_CMPRESULT, sendComperMsgData));
 
         AppData.getAppData().clean();
-    }
-
-    /**
-     * 发送VMS下发模板不能建模的数据
-     * @param socketThread
-     */
-    public static void sendFaileMsgInfo(SocketThread socketThread) {
 
     }
 
@@ -313,11 +317,9 @@ public class SendData {
         System.arraycopy(temp, 0, resultData, 19 + data.length, temp.length);
 
         temp = ConversionHelp.charToByte((char) 0x7F);
-        System.arraycopy(temp, 0, resultData, resultData.length - 1,
-                temp.length);
+        System.arraycopy(temp, 0, resultData, resultData.length - 1, temp.length);
 
         return resultData;
-
     }
 
 
@@ -332,18 +334,7 @@ public class SendData {
         System.arraycopy(temp, 0, loginData, 0, temp.length);
         temp= SPUtil.getString(Const.KEY_VMSUSERNAME,"").getBytes();//设备编号
         System.arraycopy(temp, 0, loginData, 4, temp.length);
-       // temp=SPUtil.getString("name","").getBytes();
-       // temp="设备003".getBytes();
         String strGBK=SPUtil.getString("name","");
-       /* try {
-            strGBK = URLEncoder.encode("设备003", "GBK");
-           // System.out.println(strGBK);
-           // String strUTF8 = URLDecoder.decode(str, "UTF-8");
-           // System.out.println(strUTF8);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }*/
-      //  String workNo = new String(ConversionHelp.decodeHex("设备003"), "GBK");
         temp = strGBK.getBytes("GBK");
         System.arraycopy(temp, 0, loginData, 68, temp.length);
         temp = String.valueOf(1).getBytes();
@@ -364,16 +355,6 @@ public class SendData {
         System.arraycopy(temp, 0, loginData, 256, temp.length);
         //socketThread.mSend(getReturnData(loginData));
         return getReturnData(loginData);
-
-
-       /* temp = ConversionHelp.intToByte(Const.SOCKET_VERSION);
-        Log.d("send", "login: " + temp.length);
-        System.arraycopy(temp, 0, loginData, 0, temp.length);
-        temp = SPUtil.getString(Const.KEY_VMSUSERNAME, getSerialNumber()).getBytes();
-        System.arraycopy(temp, 0, loginData, 4, temp.length);
-        temp = SPUtil.getString(Const.KEY_VMSPASSWORD, "123456").getBytes();
-        System.arraycopy(temp, 0, loginData, 68, temp.length);
-        socketThread.mSend(getSendData(Const.NMSG_CNT_DEVLOGIN, loginData));*/
 
     }
 
@@ -399,8 +380,8 @@ public class SendData {
         temp = ConversionHelp.intToByte(0x00000000);
         System.arraycopy(temp, 0, b, 9, temp.length);
 
-       // temp = ConversionHelp.intToByte(msgType);
-       // System.arraycopy(temp, 0, b, 9, temp.length);
+        // temp = ConversionHelp.intToByte(msgType);
+        // System.arraycopy(temp, 0, b, 9, temp.length);
 
         temp = ConversionHelp.shortToByte((short) 0x0002);
         System.arraycopy(temp, 0, b, 13, temp.length);
@@ -424,6 +405,48 @@ public class SendData {
                 temp.length);
 
         return resultData;
+
+    }
+
+    /**
+     *  UDP返回设备信息
+     */
+    public static void VMSErrorMsg(SocketThread socketThread) throws UnsupportedEncodingException {
+        byte[] ErrorMsg = new byte[4+64+32+32+64+128+128+4+128];
+        byte[] temp = null;
+
+        temp = ConversionHelp.intToByte(SPUtil.getInt("UUID", 0));
+        System.arraycopy(temp, 0, ErrorMsg, 0, temp.length);
+        temp = SPUtil.getString(Const.KEY_VMSUSERNAME, getSerialNumber()).getBytes();
+        System.arraycopy(temp, 0, ErrorMsg, 4, temp.length);
+        try {
+            temp = SPUtil.getString("name", "").getBytes("GBK");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.arraycopy(temp, 0, ErrorMsg, 68, temp.length);
+
+        temp=AppData.getAppData().getErrormsgidnum().getBytes("GBK");
+        System.arraycopy(temp, 0, ErrorMsg, 100, temp.length);
+
+        temp=AppData.getAppData().getErrormsgname().getBytes("GBK");
+        System.arraycopy(temp, 0, ErrorMsg, 132, temp.length);
+
+        temp=AppData.getAppData().getErrormsgpicname().getBytes("GBK");
+        System.arraycopy(temp, 0, ErrorMsg, 196, temp.length);
+
+        temp=AppData.getAppData().getErroemsg().getBytes("GBK");
+        System.arraycopy(temp, 0, ErrorMsg, 324, temp.length);
+
+        temp=ConversionHelp.getTimeByte();
+        System.arraycopy(temp, 0, ErrorMsg, 452, temp.length);
+
+        temp="".getBytes();
+        System.arraycopy(temp, 0, ErrorMsg, 456, temp.length);
+
+
+        socketThread.mSend(getSendData(Const.NMSG_ERROR_MSG, ErrorMsg));
+        AppData.getAppData().clean();
 
     }
 

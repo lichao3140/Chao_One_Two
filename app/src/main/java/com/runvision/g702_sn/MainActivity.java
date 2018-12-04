@@ -204,7 +204,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     }
 
                     if (destemplatenum == 20) {
-                        Const.VMS_TEMPLATE = false;
                         Log.i("Gavin_debug", "templatenum==20");
                         promptshow_xml.setVisibility(View.GONE);
                         cancelToast();
@@ -1557,31 +1556,30 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         if (mImportFile == null) {
             return;
         }
-
-        Const.VMS_BATCH_IMPORT_TEMPLATE = true;
+        bacthOk1 = 0;
+        bacthOk2 = 0;
+        bacthOk3 = 0;
+        Const.VMS_BATCH_IMPORT_TEMPLATE=true;
 
         System.out.println("一共：" + mSum);
         //将文件数据分成三个集合
         cuttingList(mImportFile);
-
         if (parts == 1) {
-            BatchImport impory = new BatchImport(dataList1, mHandler, loadFlag[0]);
+            BatchImport impory = new BatchImport(socketThread,dataList1, mHandler, loadFlag[0]);
             Thread thread = new Thread(impory);
             thread.start();
-            Log.i("lichao", "一个线程");
         } else if (parts == 3) {
-            BatchImport impory1 = new BatchImport(dataList1, mHandler, loadFlag[0]);
+            BatchImport impory1 = new BatchImport(socketThread,dataList1, mHandler, loadFlag[0]);
             Thread thread1 = new Thread(impory1);
             thread1.start();
 
-            BatchImport impory2 = new BatchImport(dataList2, mHandler, loadFlag[1]);
+            BatchImport impory2 = new BatchImport(socketThread,dataList2, mHandler, loadFlag[1]);
             Thread thread2 = new Thread(impory2);
             thread2.start();
 
-            BatchImport impory3 = new BatchImport(dataList3, mHandler, loadFlag[2]);
+            BatchImport impory3 = new BatchImport(socketThread,dataList3, mHandler, loadFlag[2]);
             Thread thread3 = new Thread(impory3);
             thread3.start();
-            Log.i("lichao", "三个线程");
         }
     }
 

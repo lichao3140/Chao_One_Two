@@ -26,13 +26,59 @@ public class AppData {
     private Bitmap onefacebmp;
     private Bitmap nfaceBmp=null;
 
-/////////////////////////////////////////////////////////////////////////////////////
+    private String errormsgidnum="";
+    private String errormsgname="";
+    private String errormsgpicname="";
+    private String erroemsg="";
+
+    public String getErroemsg() {
+        return erroemsg;
+    }
+
+    public void setErroemsg(String erroemsg) {
+        this.erroemsg = erroemsg;
+    }
+
+    public String getErrormsgidnum() {
+        return errormsgidnum;
+    }
+
+    public void setErrormsgidnum(String errormsgidnum) {
+        this.errormsgidnum = errormsgidnum;
+    }
+
+    public String getErrormsgname() {
+        return errormsgname;
+    }
+
+    public void setErrormsgname(String errormsgname) {
+        this.errormsgname = errormsgname;
+    }
+
+    public String getErrormsgpicname() {
+        return errormsgpicname;
+    }
+
+    public void setErrormsgpicname(String errormsgpicname) {
+        this.errormsgpicname = errormsgpicname;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
 
     private String facepicName;
 
     private User user;
 
     private String updatedeviceip;
+
+    public Bitmap getFrontbmp() {
+        return frontbmp;
+    }
+
+    public void setFrontbmp(Bitmap frontbmp) {
+        this.frontbmp = frontbmp;
+    }
+
+    private Bitmap frontbmp;
 
 
     public String getAtd_up_startime() {
@@ -72,6 +118,16 @@ public class AppData {
     private String atd_down_startime;
     private String atd_down_endtime;
 
+    public String getSnapImageID() {
+        return SnapImageID;
+    }
+
+    public void setSnapImageID(String snapImageID) {
+        SnapImageID = snapImageID;
+    }
+
+    private String SnapImageID;
+
 
     public String getAtd_type() {
         return atd_type;
@@ -83,7 +139,7 @@ public class AppData {
 
     private String atd_type;
 
-///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
     private int flag=0;
 
     public int getFlag() {
@@ -126,7 +182,7 @@ public class AppData {
         this.onefacebmp = onefacebmp;
     }
 
-///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
     public Bitmap getFaceBmp() {
         return faceBmp;
     }
