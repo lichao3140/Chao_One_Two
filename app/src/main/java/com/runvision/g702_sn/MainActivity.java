@@ -3,7 +3,6 @@ package com.runvision.g702_sn;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -89,6 +88,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MainActivity extends Activity implements NetWorkStateReceiver.INetStatusListener, View.OnClickListener {
@@ -136,9 +137,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private boolean Infra_red = true;
     private ImageStack imageStack;
 
-    public boolean comparisonEnd = false;
-    private int timingnum = 0;
-
     private String TAG = "MainActivity";
 
     private MyApplication application;
@@ -158,11 +156,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private ServerManager serverManager;
     private int socketErrorNum = 0;
 
-    private Dialog dialog = null;
     private int templatenum = 0;
     private int template = 0;
     private Toast mToast;
-
     private int destemplatenum = 0;
     private int destemplate = 0;
 
@@ -222,7 +218,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     /*更新VMS连接*/
                     if (Const.WEB_UPDATE == true) {
                         Const.WEB_UPDATE = false;
-                        if (!SPUtil.getString(Const.KEY_VMSIP, "").equals("") && SPUtil.getInt(Const.KEY_VMSPROT, 0) != 0 && !SPUtil.getString(Const.KEY_VMSUSERNAME, "").equals("") && !SPUtil.getString(Const.KEY_VMSPASSWORD, "").equals("")) {
+                        if (!SPUtil.getString(Const.KEY_VMSIP, "").equals("")
+                                && SPUtil.getInt(Const.KEY_VMSPROT, 0) != 0
+                                && !SPUtil.getString(Const.KEY_VMSUSERNAME, "").equals("")
+                                && !SPUtil.getString(Const.KEY_VMSPASSWORD, "").equals("")) {
                             //开启socket线程
                             socketReconnect(SPUtil.getString(Const.KEY_VMSIP, ""), SPUtil.getInt(Const.KEY_VMSPROT, 0));
                         }
@@ -279,7 +278,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         // promptshow_xml.setVisibility(View.GONE);
                         alert.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
-                        Infra_red=false;
+                        Infra_red = false;
                     }
                     if(isOpenOneVsMore == false) {
                         mHandler.removeMessages(Const.COMPER_END);
@@ -793,65 +792,55 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
 
     /*1：1比对操作*/
     public void faceComperFrame(Bitmap bmp) {
-        int num = 1;
         //提取人脸
-        while (num <= 10) {
-            List<FaceInfo> result = new ArrayList<FaceInfo>();
-            List<LivenessInfo> livenessInfoList = new ArrayList<>();
-            byte[] des = CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 90);
+        List<FaceInfo> result = new ArrayList<FaceInfo>();
+        List<LivenessInfo> livenessInfoList = new ArrayList<>();
+        byte[] des = CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 90);
 
-            MyApplication.mFaceLibCore.FaceDetection(des, 480, 640, result);
-            if (result.size() == 0) {
-                num = num + 5;
-                continue;
-            }
-            Boolean live = true;
-            if (SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)) {
-                live = MyApplication.mFaceLibCore.Livingthing(des, 480, 640, result, livenessInfoList);
-            }
-            if (!live) {
-                num = num + 5;
-                continue;
-            }
-            AppData.getAppData().setOneFaceBmp(CameraHelp.getFaceImgByInfraredJpg(result.get(0).getRect().left, result.get(0).getRect().top, result.get(0).getRect().right, result.get(0).getRect().bottom, CameraHelp.getBitMap(des)));
-            // AFR_FSDKFace face = new AFR_FSDKFace();
-            FaceFeature faceFeature = new FaceFeature();
-            int ret = MyApplication.mFaceLibCore.FaceFeatureExtract(des, 480, 640, result.get(0), faceFeature);
-            if (ret != 0) {
-                num = num + 5;
-                continue;
-            }
+        MyApplication.mFaceLibCore.FaceDetection(des, 480, 640, result);
+        if (result.size() == 0) {
+            return;
+        }
+        Boolean live = true;
+        if (SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)) {
+            live = MyApplication.mFaceLibCore.Livingthing(des, 480, 640, result, livenessInfoList);
+        }
+        if (!live) {
+            return;
+        }
+        AppData.getAppData().setOneFaceBmp(CameraHelp.getFaceImgByInfraredJpg(result.get(0).getRect().left, result.get(0).getRect().top, result.get(0).getRect().right, result.get(0).getRect().bottom, CameraHelp.getBitMap(des)));
+        // AFR_FSDKFace face = new AFR_FSDKFace();
+        FaceFeature faceFeature = new FaceFeature();
+        int ret = MyApplication.mFaceLibCore.FaceFeatureExtract(des, 480, 640, result.get(0), faceFeature);
+        if (ret != 0) {
+            return;
+        }
 
-            //提取身份证
-            bmp = CameraHelp.alignBitmapForNv21(bmp);//裁剪
-            int w = bmp.getWidth();
-            int h = bmp.getHeight();
-            byte[] cardDes = CameraHelp.bitmapToNv21(bmp, w, h);//转nv21
-            List<FaceInfo> result_card = new ArrayList<FaceInfo>();
-            MyApplication.mFaceLibCore.FaceDetection(cardDes, w, h, result_card);
+        //提取身份证
+        bmp = CameraHelp.alignBitmapForNv21(bmp);//裁剪
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+        byte[] cardDes = CameraHelp.bitmapToNv21(bmp, w, h);//转nv21
+        List<FaceInfo> result_card = new ArrayList<FaceInfo>();
+        MyApplication.mFaceLibCore.FaceDetection(cardDes, w, h, result_card);
 
-            if (result_card.size() == 0) {
-                num = num + 5;
-                continue;
-            }
-            FaceFeature card = new FaceFeature();
-            ret = MyApplication.mFaceLibCore.FaceFeatureExtract(cardDes, w, h, result_card.get(0), card);
-            if (ret != 0) {
-                num = num + 5;
-                continue;
-            }
+        if (result_card.size() == 0) {
+            return;
+        }
+        FaceFeature card = new FaceFeature();
+        ret = MyApplication.mFaceLibCore.FaceFeatureExtract(cardDes, w, h, result_card.get(0), card);
+        if (ret != 0) {
+            return;
+        }
 
-            FaceSimilar score = new FaceSimilar();
-            while (true) {
-                MyApplication.mFaceLibCore.FacePairMatching(faceFeature, card, score);
-                if (score.getScore() == 0) {
-                    num = num + 5;
-                    break;
-                } else {
-                    num = 200;
-                    AppData.getAppData().setoneCompareScore(score.getScore());
-                    break;
-                }
+        FaceSimilar score = new FaceSimilar();
+        while (true) {
+            MyApplication.mFaceLibCore.FacePairMatching(faceFeature, card, score);
+            if (score.getScore() == 0) {
+                break;
+            } else {
+                AppData.getAppData().setoneCompareScore(score.getScore());
+                break;
             }
         }
     }
@@ -1534,7 +1523,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         bacthOk2 = 0;
         bacthOk3 = 0;
         Const.VMS_BATCH_IMPORT_TEMPLATE = true;
-
+        Log.e("lichao", "batchImport=Const.VMS_BATCH_IMPORT_TEMPLATE = true");
         System.out.println("一共：" + mSum);
         //将文件数据分成三个集合
         cuttingList(mImportFile);
