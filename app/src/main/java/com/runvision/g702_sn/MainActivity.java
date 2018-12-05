@@ -481,9 +481,19 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case Const.SOCKRT_SENDIMAGE:/*VMS批量导入操作*/
                     batchImport();
                     break;
-                case 101:/*VMS批量导入结束操作*/
+                case 100:/*VMS批量导入结束操作---一个线程*/
+                    int success0 = (int) msg.obj;
+                    bacthOk0 = success0;
+                    Log.e("lichaoo", "100:" + bacthOk0 + Const.VMS_ERROR_TEMPLATE + "=" + mSum);
+                    if (bacthOk0 + Const.VMS_ERROR_TEMPLATE == mSum) {
+                        Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
+                        Const.VMS_BATCH_IMPORT_TEMPLATE = false;
+                    }
+                    break;
+                case 101:/*VMS批量导入结束操作---三个线程*/
                     int success1 = (int) msg.obj;
                     bacthOk1 = success1;
+                    Log.e("lichaoo", "101:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -492,6 +502,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 102:/*VMS批量导入结束操作*/
                     int success2 = (int) msg.obj;
                     bacthOk2 = success2;
+                    Log.e("lichaoo", "102:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -500,6 +511,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 103:/*VMS批量导入结束操作*/
                     int success3 = (int) msg.obj;
                     bacthOk3 = success3;
+                    Log.e("lichaoo", "103:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -1482,8 +1494,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private List<File> dataList2 = null;
     private List<File> dataList3 = null;
     //三个线程消息传递对应的标志为
-    private int[] loadFlag = {101, 102, 103};
-    private int bacthOk1, bacthOk2, bacthOk3 = 0;
+    private int[] loadFlag = {100, 101, 102, 103};
+    private int bacthOk0, bacthOk1, bacthOk2, bacthOk3 = 0;
     private int parts = 0;
 
     private List<File> getImagePathFile() {
@@ -1519,28 +1531,31 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         if (mImportFile == null) {
             return;
         }
+        bacthOk0 = 0;
         bacthOk1 = 0;
         bacthOk2 = 0;
         bacthOk3 = 0;
         Const.VMS_BATCH_IMPORT_TEMPLATE = true;
-        Log.e("lichao", "batchImport=Const.VMS_BATCH_IMPORT_TEMPLATE = true");
+        Log.e("lichaoo", "batchImport:" + bacthOk1 + bacthOk2 + bacthOk3  + "=" + mSum);
         System.out.println("一共：" + mSum);
         //将文件数据分成三个集合
         cuttingList(mImportFile);
         if (parts == 1) {
+            Log.i("lichaoo", "batchImport one");
             BatchImport impory = new BatchImport(socketThread,dataList1, mHandler, loadFlag[0]);
             Thread thread = new Thread(impory);
             thread.start();
         } else if (parts == 3) {
-            BatchImport impory1 = new BatchImport(socketThread,dataList1, mHandler, loadFlag[0]);
+            Log.i("lichaoo", "batchImport three");
+            BatchImport impory1 = new BatchImport(socketThread,dataList1, mHandler, loadFlag[1]);
             Thread thread1 = new Thread(impory1);
             thread1.start();
 
-            BatchImport impory2 = new BatchImport(socketThread,dataList2, mHandler, loadFlag[1]);
+            BatchImport impory2 = new BatchImport(socketThread,dataList2, mHandler, loadFlag[2]);
             Thread thread2 = new Thread(impory2);
             thread2.start();
 
-            BatchImport impory3 = new BatchImport(socketThread,dataList3, mHandler, loadFlag[2]);
+            BatchImport impory3 = new BatchImport(socketThread,dataList3, mHandler, loadFlag[3]);
             Thread thread3 = new Thread(impory3);
             thread3.start();
         }

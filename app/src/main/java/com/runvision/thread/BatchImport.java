@@ -145,6 +145,7 @@ public class BatchImport implements Runnable {
                     MyApplication.faceProvider.deleteUserById(id);
                     FileUtils.deleteTempter(imageID, "FaceTemplate");
                     file.delete();
+                    Const.VMS_ERROR_TEMPLATE++;
                     System.out.println("人脸定位失败");
                     Log.i("Gavin", "人脸定位失败:" );
                     sendMsg(i);
@@ -152,7 +153,7 @@ public class BatchImport implements Runnable {
                 }
             }
         }  catch (Exception e) {
-            Log.e("Gavin", e.getMessage());
+            Log.e("Gavin", "==BatchImport==" + e.getMessage());
         }
     }
 

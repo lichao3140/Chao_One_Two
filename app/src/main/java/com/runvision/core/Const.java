@@ -178,6 +178,7 @@ public class Const {
     public static Boolean BATCH_IMPORT_TEMPLATE = false;
     public static Boolean VMS_BATCH_IMPORT_TEMPLATE = false;
     public static int VMS_TEMPLATE = 0;
+    public static int VMS_ERROR_TEMPLATE = 0;
 
     public static int BATCH_FLAG = 0;
 
