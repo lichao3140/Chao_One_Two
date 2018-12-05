@@ -485,7 +485,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     int success0 = (int) msg.obj;
                     bacthOk0 = success0;
                     Log.e("lichaoo", "100:" + bacthOk0 + Const.VMS_ERROR_TEMPLATE + "=" + mSum);
-                    if (bacthOk0 + Const.VMS_ERROR_TEMPLATE == mSum) {
+                    if (bacthOk0 + Const.VMS_ERROR_TEMPLATE >= mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
                     }
@@ -493,7 +493,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 101:/*VMS批量导入结束操作---三个线程*/
                     int success1 = (int) msg.obj;
                     bacthOk1 = success1;
-                    Log.e("lichaoo", "101:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
+//                    Log.e("lichaoo", "101:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -502,7 +502,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 102:/*VMS批量导入结束操作*/
                     int success2 = (int) msg.obj;
                     bacthOk2 = success2;
-                    Log.e("lichaoo", "102:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
+//                    Log.e("lichaoo", "102:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -511,7 +511,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 case 103:/*VMS批量导入结束操作*/
                     int success3 = (int) msg.obj;
                     bacthOk3 = success3;
-                    Log.e("lichaoo", "103:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
+//                    Log.e("lichaoo", "103:" + bacthOk1 + bacthOk2 + bacthOk3 + "=" + mSum);
                     if (bacthOk1 + bacthOk2 + bacthOk3 == mSum) {
                         Const.VMS_TEMPLATE = Const.VMS_TEMPLATE + 20;
                         Const.VMS_BATCH_IMPORT_TEMPLATE = false;
@@ -1536,7 +1536,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         bacthOk2 = 0;
         bacthOk3 = 0;
         Const.VMS_BATCH_IMPORT_TEMPLATE = true;
-        Log.e("lichaoo", "batchImport:" + bacthOk1 + bacthOk2 + bacthOk3  + "=" + mSum);
+//        Log.e("lichaoo", "batchImport1:" + bacthOk0 + "=" + mSum);
+//        Log.e("lichaoo", "batchImport3:" + bacthOk1 + bacthOk2 + bacthOk3  + "=" + mSum);
         System.out.println("一共：" + mSum);
         //将文件数据分成三个集合
         cuttingList(mImportFile);
