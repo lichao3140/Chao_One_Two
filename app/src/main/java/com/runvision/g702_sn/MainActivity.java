@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -264,29 +263,25 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     }
 
                     /*显示逻辑*/
-                    if(promptshow_xml.getVisibility()==View.VISIBLE)
-                    {
+                    if(promptshow_xml.getVisibility() == View.VISIBLE) {
                         oneVsMoreView.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
                         // home_layout.setVisibility(View.GONE);
                     }
-                    if(alert.getVisibility()==View.VISIBLE)
-                    {
+                    if(alert.getVisibility() == View.VISIBLE) {
                         // AppData.getAppData().setCompareScore(0);
                         home_layout.setVisibility(View.GONE);
                         oneVsMoreView.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
                     }
-                    if(home_layout.getVisibility()==View.VISIBLE)
-                    {
+                    if(home_layout.getVisibility() == View.VISIBLE) {
                         oneVsMoreView.setVisibility(View.GONE);
                         // promptshow_xml.setVisibility(View.GONE);
                         alert.setVisibility(View.GONE);
                         pro_xml.setVisibility(View.GONE);
                         Infra_red=false;
                     }
-                    if(isOpenOneVsMore==false)
-                    {
+                    if(isOpenOneVsMore == false) {
                         mHandler.removeMessages(Const.COMPER_END);
                         mHandler.removeMessages(Const.MSG_FACE);
                     }
@@ -516,7 +511,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
             }
         }
     };
-
 
     /**
      * ACTIVITY周期
