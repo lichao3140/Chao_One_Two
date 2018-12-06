@@ -82,7 +82,6 @@ public class MyApplication extends Application {
         FileUtils.copyFile(ff,Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat");
         FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat", getFilesDir().getAbsolutePath() + File.separator + ".asf_install.dat");
 
-        Log.i("MyApplication", "MyApplication:" + getFilesDir().getAbsolutePath() + File.separator + ".asf_install.dat");
         int ret = mFaceLibCore.initLib(context);
         if (ret == 0) {
             Toast.makeText(this, "算法初始化成功", Toast.LENGTH_SHORT).show();

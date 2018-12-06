@@ -1248,6 +1248,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                                     }
                                 }
                                 byte[] bitmap_byte = info.getDes();
+                                //抓拍动态图片保存
                                 AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left, info.getFace().getRect().top, info.getFace().getRect().right, info.getFace().getRect().bottom, CameraHelp.getBitMap(bitmap_byte)));
                                 fenshu = score.getScore();
                                 continue;
