@@ -175,8 +175,10 @@ public class Const {
      */
     public static final int CLOSE_DOOR_TIME = 2;
 
-    public static Boolean BATCH_IMPORT_TEMPLATE = false;
-    public static Boolean VMS_BATCH_IMPORT_TEMPLATE = false;
+    public static Boolean IS_SYSTEM_STAND_BY = true;//系统待机
+    public static Boolean IS_SYSTEM_DORMANCY = true;//系统休眠
+    public static Boolean BATCH_IMPORT_TEMPLATE = false;//批量导入模板
+    public static Boolean VMS_BATCH_IMPORT_TEMPLATE = false;//VMS批量导入模板
     public static int VMS_TEMPLATE = 0;
     public static int VMS_ERROR_TEMPLATE = 0;
 

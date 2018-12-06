@@ -136,7 +136,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
     private boolean isOpenOneVsMore = true;//1:N是否对比
     private boolean Infra_red = true;
     private ImageStack imageStack;
-
+    private int timingnum = 0;//待机
     private String TAG = "MainActivity";
 
     private MyApplication application;
@@ -199,7 +199,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     }
 
                     if (destemplatenum == 20) {
-                        Log.i("Gavin_debug", "templatenum==20");
                         promptshow_xml.setVisibility(View.GONE);
                         cancelToast();
                         ReaderCardFlag = true;//1:1
@@ -248,7 +247,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         String time22 = TestDate.getDateBefore(new Date(), SPUtil.getInt(Const.KEY_PRESERVATION_DAY, 90));
 
                         if (MyApplication.faceProvider.quaryUserTableRowCount("select count(id) from tUser") != 0) {
-                            Log.i("Gavin", "quaryUserTableRowCount:不为0");
                             mList = MyApplication.faceProvider.getAllPoints();
                             for (int i = 0; i < mList.size(); i++) {
                                 if (TimeCompare(time11, time22, TestDate.timetodate(String.valueOf(mList.get(i).getTime())))) {
@@ -260,6 +258,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                             }
                         }
                     }
+
+                    /*休眠显示*/
+
 
                     /*显示逻辑*/
                     if(promptshow_xml.getVisibility() == View.VISIBLE) {
@@ -420,7 +421,9 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         sendMessageDelayed(msg3, 1000);
                     }
                     if (count1 == 0) {
-                        home_layout.setVisibility(View.GONE);
+                        if (Const.IS_SYSTEM_STAND_BY) {
+                            home_layout.setVisibility(View.GONE);
+                        }
                         stratThread();
                         Infra_red = true;
                         bStop = false;
@@ -428,6 +431,21 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         if (uithread == null) {
                             uithread = new UIThread();
                             uithread.start();
+                        }
+                        /*待机显示*/
+                        if(faceDetectTask != null) {
+                            if(faceDetectTask.faceflag == false) {
+                                timingnum++;
+                                Log.i(TAG, "timingnum:" + timingnum);
+                                if (timingnum >= 180 && Const.IS_SYSTEM_STAND_BY) {
+                                    home_layout.setVisibility(View.VISIBLE);
+                                    Const.IS_SYSTEM_STAND_BY = false;
+                                }
+                            } else {
+                                home_layout.setVisibility(View.GONE);
+                                timingnum = 0;
+                                Const.IS_SYSTEM_STAND_BY = true;
+                            }
                         }
                     }
                     break;
@@ -1275,8 +1293,8 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 //G69A
                 //int status = GPIOHelper.readStatus();
                 //G701  G702
-                int status = PosUtil.getPriximitySensorStatus();
-                //status = 1;
+                //int status = PosUtil.getPriximitySensorStatus();
+                int status = 1;
                 if (redflag == true) {
                     try {
                         Thread.sleep(1500);
@@ -1303,7 +1321,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                                 }
                             }
                         }
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         break;
                     }
                 }

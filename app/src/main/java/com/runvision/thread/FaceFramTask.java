@@ -59,7 +59,7 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
     protected Void doInBackground(Void... params) {
         while (isRuning) {
             //G702---90   G701---270
-            des= CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 90);
+            des = CameraHelp.rotateCamera(imageStack.pullImageInfo().getData(), 640, 480, 270);
             MyApplication.mFaceLibCore.FaceDetection(des, 480, 640, result);
             if (result.size() != 0) {
                 Log.i(TAG, result.get(0).getRect().left + "," + result.get(0).getRect().top);
@@ -69,8 +69,8 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
                 if(SPUtil.getBoolean(Const.KEY_ISOPENLIVE, Const.OPEN_LIVE)) {
                     live = MyApplication.mFaceLibCore.Livingthing(des, 480, 640, result,livenessInfoList);
                 }
-                faceflag=true;
-                if((!flag)&&(live)) {
+                faceflag = true;
+                if((!flag) && (live)) {
                     FaceInfoss info = new FaceInfoss(des,result.get(0));
                     Message msg = new Message();
                     msg.obj = info;
@@ -79,7 +79,7 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
                 }
             } else {
                 Log.i(TAG, "无人脸");
-                if (imageStack!=null) {
+                if (imageStack != null) {
                     imageStack.clearAll();
                 }
                 FaceLibCore.not_Live = 0;

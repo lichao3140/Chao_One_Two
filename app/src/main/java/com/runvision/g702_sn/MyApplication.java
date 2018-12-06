@@ -71,22 +71,23 @@ public class MyApplication extends Application {
         String serlia = getSerialNumber();
         if (serlia.equals("") || serlia.length() < 4 || !serlia.substring(0, 4).equals("R50A")) {
             LogToFile.e(TAG,"该设备没有序列号");
-//            finishActivity();
+            finishActivity();
         }
         File[] fs = context.getFilesDir().listFiles();
         String ff = null;
         for (File f : fs){
             System.out.println(f);
-            ff= f.toString();
+            ff = f.toString();
         }
         FileUtils.copyFile(ff,Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat");
-        FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat", ff);
+        FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/FaceAndroid/.asf_install.dat", getFilesDir().getAbsolutePath() + File.separator + ".asf_install.dat");
 
+        Log.i("MyApplication", "MyApplication:" + getFilesDir().getAbsolutePath() + File.separator + ".asf_install.dat");
         int ret = mFaceLibCore.initLib(context);
         if (ret == 0) {
             Toast.makeText(this, "算法初始化成功", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "算法初始化失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "算法初始化失败" + ret, Toast.LENGTH_SHORT).show();
         }
         faceProvider=new FaceProvider(this);
         if (faceProvider.querAdminSize() == 0) {

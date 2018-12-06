@@ -19,12 +19,17 @@ public class UdiskReceiver extends BroadcastReceiver {
     /**
      * G69A系统 U盘路径
      */
-    private String path_G69A = "/mnt/usb_storage/USB_DISK1/udisk0/G701_SN_AGM.apk";
+    private String path_G69A = "/mnt/usb_storage/USB_DISK1/udisk0/G701_AGM.apk";
+
+    /**
+     * G701系统 U盘路径
+     */
+    private String path_G701 = "/mnt/usb_storage/USB_DISK0/udisk0/G701_AGM.apk";
 
     /**
      * G702系统 U盘路径
      */
-    private String path_G701 = "/mnt/usb_storage/USB_DISK0/udisk0/G701_SN_AGM.apk";
+    private String path_G702 = "/mnt/usb_storage/USB_DISK0/udisk0/G702_AGM.apk";
 
     @Override
     public void onReceive(Context context, Intent intent) {
