@@ -68,7 +68,7 @@ public class UdiskReceiver extends BroadcastReceiver {
                 // 设置内容
                 .setPositiveButton("更新",
                         (dialog1, which) -> {
-                            String fileName = path_G701;
+                            String fileName = path_G702;
                             Uri uri = Uri.fromFile(new File(fileName));
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             intent.setDataAndType(uri, "application/vnd.android.package-archive");
