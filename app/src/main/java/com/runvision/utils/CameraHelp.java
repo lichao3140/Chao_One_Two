@@ -198,10 +198,11 @@ public class CameraHelp {
 
 
     //只能用于横屏的抠脸
-    public static Bitmap getFaceImgByInfraredJpg(int left, int top, int right, int bottom, Bitmap bmp) {
+    public static Bitmap getXFaceImgByInfraredJpg(int left, int top, int right, int bottom, Bitmap bmp) {
         //获取图片的高宽
         int width = bmp.getWidth();
         int height = bmp.getHeight();
+
         //正常坐标
         if (top != bottom && left != right) {
             //  获取人脸框的宽度  然后方法2倍
@@ -254,6 +255,63 @@ public class CameraHelp {
         return null;
     }
 
+    //只能用于竖屏的抠脸
+    public static Bitmap getYFaceImgByInfraredJpg(int left, int top, int right, int bottom, Bitmap bmp) {
+        //获取图片的高宽
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+
+        //正常坐标
+        if (top != bottom && left != right) {
+            //  获取人脸框的宽度  然后方法2倍
+            int iFaceWidth = (int) ((right - left) * 1.5);
+
+            //如果放大后 发现大于图片的宽度  就改成图片的宽度-10
+            if (iFaceWidth >= width) {
+                iFaceWidth = width - 10;
+            }
+
+            //高度放大3倍
+            int iFaceHeight = (int) ((bottom - top) * 1.5);
+            if (iFaceHeight >= height) {
+                iFaceHeight = height - 10;
+            }
+
+
+            int iLeft = left + (right - left) / 2 - iFaceWidth / 2;
+            iLeft = iLeft > 0 ? iLeft : 0;
+
+            int iTop = top + (bottom - top) / 2 - iFaceHeight / 2;
+            iTop = iTop > 0 ? iTop : 0;
+
+            if (iLeft < width && iTop < height) {
+                int iWidth = 0;
+                int iHeight = 0;
+                if (width < (iLeft + iFaceWidth)) {
+                    iWidth = width - iLeft - 10;
+                } else {
+                    iWidth = iFaceWidth;
+                }
+
+                if (height < (iTop + iFaceHeight)) {
+                    iHeight = height - iTop - 10;
+                } else {
+                    iHeight = iFaceHeight;
+                }
+
+                int oldW = iWidth;
+                iWidth = (int) ((81.0f / 111.0f) * (float) iHeight);
+                iLeft = iLeft + ((oldW / 2) - iWidth / 2);
+                iLeft = iLeft > 0 ? iLeft : 0;
+
+                if (iLeft + iWidth >= bmp.getWidth()) {
+                    iWidth = bmp.getWidth() - iLeft - 5;
+                }
+                return Bitmap.createBitmap(bmp, iLeft, iTop, iWidth, iHeight);
+            }
+        }
+        return null;
+    }
 
     /*public static Bitmap getFaceImgByInfraredJpg(int left, int top, int right, int bottom, Bitmap bmp) {
         int width = bmp.getWidth()-50;

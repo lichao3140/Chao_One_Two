@@ -96,7 +96,7 @@ public class FaceFramTask extends AsyncTask<Void, Rect, Void> {
         mCameraView.setFacePamaer(values[0]);
         if (mCameraView.getCamerType() == 1 && result != null && Const.is_regFace && flag) {
                 Bitmap map = CameraHelp.getBitMap(des);
-                AppData.getAppData().setFaceBmp(CameraHelp.getFaceImgByInfraredJpg(values[0].left, values[0].top, values[0].right, values[0].bottom, map));
+                AppData.getAppData().setFaceBmp(CameraHelp.getXFaceImgByInfraredJpg(values[0].left, values[0].top, values[0].right, values[0].bottom, map));
                 AppData.getAppData().setFlag(Const.REG_FACE);
                 Const.is_regFace=false;
         }

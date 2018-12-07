@@ -838,7 +838,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         if (!live) {
             return;
         }
-        AppData.getAppData().setOneFaceBmp(CameraHelp.getFaceImgByInfraredJpg(result.get(0).getRect().left, result.get(0).getRect().top, result.get(0).getRect().right, result.get(0).getRect().bottom, CameraHelp.getBitMap(des)));
+        AppData.getAppData().setOneFaceBmp(CameraHelp.getXFaceImgByInfraredJpg(result.get(0).getRect().left, result.get(0).getRect().top, result.get(0).getRect().right, result.get(0).getRect().bottom, CameraHelp.getBitMap(des)));
         // AFR_FSDKFace face = new AFR_FSDKFace();
         FaceFeature faceFeature = new FaceFeature();
         int ret = MyApplication.mFaceLibCore.FaceFeatureExtract(des, 480, 640, result.get(0), faceFeature);
@@ -1219,7 +1219,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 if (face == null) {
                     face = new FaceFeature();
                 }
-                //  AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left,info.getFace().getRect().top,info.getFace().getRect().right,info.getFace().getRect().bottom,CameraHelp.getBitMap(info.getDes())));
                 int ret = MyApplication.mFaceLibCore.FaceFeatureExtract(info.getDes(), 480, 640, info.getFace(), face);
                 if (ret == 0) {
                     float fenshu = SPUtil.getFloat(Const.KEY_ONEVSMORESCORE, Const.ONEVSMORE_SCORE);
@@ -1249,7 +1248,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                                 }
                                 byte[] bitmap_byte = info.getDes();
                                 //抓拍动态图片保存
-                                AppData.getAppData().SetNFaceBmp(CameraHelp.getFaceImgByInfraredJpg(info.getFace().getRect().left, info.getFace().getRect().top, info.getFace().getRect().right, info.getFace().getRect().bottom, CameraHelp.getBitMap(bitmap_byte)));
+                                AppData.getAppData().SetNFaceBmp(CameraHelp.getYFaceImgByInfraredJpg(info.getFace().getRect().left, info.getFace().getRect().top, info.getFace().getRect().right, info.getFace().getRect().bottom, CameraHelp.getBitMap(bitmap_byte)));
                                 fenshu = score.getScore();
                                 continue;
                             }
