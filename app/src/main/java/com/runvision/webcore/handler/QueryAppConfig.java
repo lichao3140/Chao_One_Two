@@ -84,7 +84,7 @@ public class QueryAppConfig implements RequestHandler {
         String edition = SPUtil.getString(Const.KEY_EDITION, "");
         map.put(Const.KEY_EDITION, edition);
 
-        String telephonenumber = SPUtil.getString(Const.KEY_TELEPHONE_NUMBER, "0755-83532659");
+        String telephonenumber = SPUtil.getString(Const.KEY_TELEPHONE_NUMBER, "0755-86532659");
         map.put(Const.KEY_TELEPHONE_NUMBER, telephonenumber);
 
         response.setStatusCode(200);
