@@ -3,6 +3,7 @@ package com.runvision.g702_sn;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -63,6 +64,7 @@ import com.runvision.webcore.ServerManager;
 import com.telpo.tps550.api.TelpoException;
 import com.telpo.tps550.api.idcard.IdCard;
 import com.telpo.tps550.api.idcard.IdentityInfo;
+import com.telpo.tps550.api.util.ShellUtils;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -350,6 +352,10 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         }
                         Const.UPDATE_IP = false;
                     }
+
+                    if (SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(Const.MSG_READ_CARD, ""), 100);
+                    }
                     break;
 
                 case Const.MSG_FACE://开启一比n处理
@@ -434,7 +440,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                         if(faceDetectTask != null) {
                             if(faceDetectTask.faceflag == false) {
                                 timingnum++;
-                                Log.i(TAG, "timingnum:" + timingnum);
                                 if (timingnum >= 180 && Const.IS_SYSTEM_STAND_BY) {
                                     home_layout.setVisibility(View.VISIBLE);
                                     Const.IS_SYSTEM_STAND_BY = false;
@@ -572,6 +577,22 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ShellUtils.execCommand("echo 3 > /sys/class/telpoio/power_status", false);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (!SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)) {
+            if (mAsyncTask != null) {
+                mAsyncTask.setTaskIsRuning(false);
+                mAsyncTask = null;
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -583,8 +604,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         registerReceiver(mUsbReceiver, usbDeviceStateFilter);
         //USB身份证读卡
         startIDCardReader();
-        //串口身份证读卡
-        startIdCardThread();
         startService(intentService);
 
         if (uithread == null) {
@@ -595,6 +614,13 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         if (mMyRedThread == null) {
             mMyRedThread = new MyRedThread();  //红外
             mMyRedThread.start();
+        }
+
+        if (!SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)) {
+            if (mAsyncTask != null) {
+                mAsyncTask.setTaskIsRuning(false);
+                mAsyncTask = null;
+            }
         }
         mMyRedThread.startredThread();
 
@@ -1047,9 +1073,7 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                 } else {
                     GPIOHelper.openDoor(true);
                     PosUtil.setRelayPower(1);//开闸
-//                    PosUtil.getWg34Status(13701163);
-//                    Log.i(TAG, "WG:" + PosUtil.getWg26Status(23821899));
-//                    showToast("Wg34:" + PosUtil.getWg34Status(13701163));
+                    PosUtil.getWg26Status(Integer.parseInt(user.getWordNo()));
                     mHandler.postDelayed(() -> {
                         GPIOHelper.openDoor(false);
                         PosUtil.setRelayPower(0);//关闸
@@ -1801,14 +1825,19 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         dialog.show();
     }
 
-    /******************串口身份证读卡******************/
-    private IdentityInfo info;
-    Bitmap cardBitmap;
-    byte[] image;
-    private boolean isSerialOpen = false;
-    private boolean finishSign = false;
+    /******************G701/G702身份证读卡******************/
+    private UsbManager mUsbManager;
+    private UsbDevice idcard_reader;
+    private boolean hasReader = false;
+    private PendingIntent mPermissionIntent;
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
-    private class GetIDInfoTask extends AsyncTask<Void, Integer, TelpoException> {
+    private IdentityInfo info;
+    private Bitmap cardBitmap;
+    private byte[] image;
+    private boolean hasPermission = false;
+
+    private class GetIDInfoTask extends AsyncTask<Void, Integer, Boolean> {
         public boolean taskIsRuning = true;
 
         public void setTaskIsRuning(boolean taskIsRuning) {
@@ -1819,43 +1848,48 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
         protected void onPreExecute() {
             super.onPreExecute();
             info = null;
-            cardBitmap = null;
         }
 
         @Override
-        protected TelpoException doInBackground(Void... voids) {
+        protected Boolean doInBackground(Void... voids) {
             while (taskIsRuning) {
-                TelpoException result = null;
                 try {
-                    if (!isSerialOpen || finishSign) {
-                        IdCard.open(115200, "/dev/ttyS3");
-                        isSerialOpen = true;
-                    }
-                    info = IdCard.checkIdCard(2000);
-                    if ("".equals(info.getName())) {
-                        return new TelpoException();
-                    }
-                    image = IdCard.getIdCardImage();
-                    cardBitmap = IdCard.decodeIdCardImage(image);
-                } catch (TelpoException e) {
-                    e.printStackTrace();
-                    result = e;
-                } finally {
-                    //IdCard.close();
+                    IdCard.open(IdCard.IDREADER_TYPE_USB, mContext);
+                    info = IdCard.checkIdCard(1000);
+                } catch (TelpoException e1) {
+                    e1.printStackTrace();
                 }
-                return result;
+
+                if (info != null) {
+                    if("".equals(info.getName())) {
+                        return false;
+                    }
+                    image = info.getHead_photo();
+                    if ("I".equals(info.getCard_type())) {
+                        if(image.length != 1024) {
+                            return false;
+                        }
+                    }else {
+                        if(image.length == 2048 || image.length == 1024) {
+                        }else {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
             }
-            return null;
+            return false;
         }
 
         @Override
-        protected void onPostExecute(TelpoException result) {
+        protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            if (result == null && cardBitmap != null) {
-                if (finishSign) {
-                    IdCard.close();
+            if (result) {
+                byte[] buf = new byte[WLTService.imgLength];
+                if (1 == WLTService.wlt2Bmp(image, buf)) {
+                    cardBitmap = IDPhotoHelper.Bgr2Bitmap(buf);
                 }
-                if (!info.getName().contains("timeout") && ReaderCardFlag) {
+                if (ReaderCardFlag) {
                     isOpenOneVsMore = false;
                     ReaderCardFlag = false;
                     Message msg = new Message();
@@ -1863,11 +1897,6 @@ public class MainActivity extends Activity implements NetWorkStateReceiver.INetS
                     msg.obj = info;
                     mHandler.sendMessage(msg);
                 }
-                if (SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)) {
-                    mHandler.sendEmptyMessageDelayed(Const.MSG_READ_CARD, 2000);
-                }
-            } else if (SPUtil.getBoolean(Const.KEY_ISOPEN_ONE, Const.OPEN_ONE_VS_ONE)){
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(Const.MSG_READ_CARD, ""), 100);
             }
         }
     }
